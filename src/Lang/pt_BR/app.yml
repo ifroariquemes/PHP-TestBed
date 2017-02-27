@@ -1,0 +1,30 @@
+code:
+    line: Linha :line
+    echo: Imprime na tela
+    echo-scalar: Imprime na tela :value
+    assign: A variável :var recebe o valor :value
+    assign-op: A variável :var recebe :value
+    array: o conjunto de valores :value
+    binary-op: o valor :value resultante da operação :expr
+    binary-op-var: o valor :value resultante da operação :expr onde :where
+    do-while-enter: --- Entrou no laço DO-WHILE ---
+    do-while-exit: --- Saiu do laço DO-WHILE ---
+    while-enter: --- Entrou no laço WHILE ---
+    while-exit: --- Saiu do laço WHILE ---
+    if-enter: --- Entrou na condicional IF ---
+    if-exit: --- Saiu da condicional IF ---
+    if-cond: A condição da estrutura retorna
+    else-cond: Nenhuma condição satisfeita executa o bloco else
+    for-enter: --- Entrou no laço FOR ---
+    for-exit: --- Saiu do laço FOR ---
+    loop-cond: A condição do laço retorna    
+    post-inc: A variável :var tem seu valor incrementado para :value
+    post-dec: A variável :var tem seu valor decrementado para :value
+exceptions:
+    script-not-found: Script :script não foi encontrado
+    node-not-implemented: A resolução de :node ainda não foi implementada
+messages:
+    start: Script iniciado
+    end: Script finalizado
+config:
+    timestamp: d/m/Y H:i:s.u

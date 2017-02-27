@@ -1,0 +1,34 @@
+body {
+    font-family: "Consolas", monospace;
+    background: #2B2B2B;
+    color: #F8F8F0;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.testbed-message {
+    display: inline-block;
+    line-height: 2em;
+}
+
+.testbed-expression {
+    background: rgb(248,248,240);
+	color: rgb(48,48,48);
+    padding: 3px;
+}
+
+.testbed-level {
+    display: inline-block;
+    min-width: 10px;
+}
+
+.testbed-system-message { color: #AE81FF }
+.testbed-system-exception { color: #FD971F }
+.testbed-variable { color: #66D9EF }
+.testbed-expression .testbed-variable { color: #6D3206 }
+.testbed-type-NULL, 
+.testbed-type-boolean { color: #F92672 }
+.testbed-type-string { color: #CE7B00 }
+.testbed-type-float, 
+.testbed-type-double,
+.testbed-type-integer { color: #FF00FF }

@@ -1,0 +1,10 @@
+code:
+    line: Line :line
+    assign: The variable $:var receives the value :value
+exceptions:
+    script-not-found: Script :script was not found
+messages:
+    start: Script started
+    end: Script ended
+config:
+    timestamp: Y-m-d H:i:s.u
