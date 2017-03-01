@@ -12,13 +12,15 @@ class BinaryOp
     private $left;
     private $right;
     private $usedVars;
+    private $usedConsts;
     private $result;
 
-    public function __construct(\PhpParser\Node\Expr\BinaryOp $expr, array &$usedVars = array())
+    public function __construct(\PhpParser\Node\Expr\BinaryOp $expr, array &$usedVars = array(), array &$usedConsts = array())
     {
 
         $this->expr = $expr;
         $this->usedVars = &$usedVars;
+        $this->usedConsts = &$usedConsts;
         $this->left = $this->resolve($expr->left);
         $this->right = $this->resolve($expr->right);
     }
@@ -26,13 +28,27 @@ class BinaryOp
     private function resolve(\PhpParser\Node\Expr $bin)
     {
         if ($bin instanceof \PhpParser\Node\Expr\BinaryOp) {
-            $nExpr = new BinaryOp($bin, $this->usedVars);
+            $nExpr = new BinaryOp($bin, $this->usedVars, $this->usedConsts);
             return $nExpr->getResult();
-        } else if ($bin instanceof \PhpParser\Node\Expr\Variable) {
+        } elseif ($bin instanceof \PhpParser\Node\Expr\Variable) {
             $this->usedVars[$bin->name] = \PhpTestBed\Repository::getInstance()->get($bin->name);
             return $this->usedVars[$bin->name];
-        } else if ($bin instanceof \PhpParser\Node\Scalar) {
+        } elseif ($bin instanceof \PhpParser\Node\Scalar\Encapsed) {
+            $enc = new \PhpTestBed\Node\Scalar\Encapsed($bin);
+            $this->usedVars = array_merge($this->usedVars, $enc->getUsedVars());
+            return $enc->getResult();
+        } elseif ($bin instanceof \PhpParser\Node\Scalar) {
             return $bin->value;
+        } elseif ($bin instanceof \PhpParser\Node\Expr\ConstFetch) {
+            $this->usedConsts[$bin->name->parts[0]] = \PhpTestBed\Repository::getInstance()->getConst($bin->name->parts[0]);
+            return $this->usedConsts[$bin->name->parts[0]];
+        } else {
+            \PhpTestBed\ScriptCrawler::getInstance()->printMessage(
+                    Stylizer::systemException(
+                            I18n::getInstance()->get('exceptions.node-not-implemented'
+                                    , ['node' => get_class($bin)]) . ' (BinaryOp::resolve)'
+                    )
+            );
         }
     }
 
@@ -41,41 +57,35 @@ class BinaryOp
         $mVar = [
             'expr' => Stylizer::expression($this->getExpr($this->expr)),
             'value' => Stylizer::value($this->getResult()),
+            'where' => \PhpTestBed\Repository::showUsed($this->usedConsts, $this->usedVars)
         ];
-        $where = '';
-        foreach ($this->usedVars as $var => $value) {
-            $where .= sprintf('%s %s %s, '
-                    , Stylizer::variable("$$var")
-                    , Stylizer::operation('=')
-                    , Stylizer::type($value));
-        }
-        if (empty($where)) {
+        if (empty($mVar['where'])) {
             return I18n::getInstance()->get('code.binary-op', $mVar);
-        } else {
-            $where = substr($where, 0, -2);
-            $mVar['where'] = $where;
-            return I18n::getInstance()->get('code.binary-op-var', $mVar);
         }
+        return I18n::getInstance()->get('code.binary-op-var', $mVar);
     }
 
     public function getExpr(\PhpParser\Node\Expr $expr = null)
     {
-        if ($expr->left instanceof \PhpParser\Node\Expr\BinaryOp) {
-            $left = $this->getExpr($expr->left);
-        } else if ($expr->left instanceof \PhpParser\Node\Expr\Variable) {
-            $left = Stylizer::variable("\${$expr->left->name}");
-        } else {
-            $left = Stylizer::type($this->left);
-        }
-        if ($expr->right instanceof \PhpParser\Node\Expr\BinaryOp) {
-            $right = $this->getExpr($expr->right);
-        } else if ($expr->right instanceof \PhpParser\Node\Expr\Variable) {
-            $right = Stylizer::variable("\${$expr->right->name}");
-        } else {
-            $right = Stylizer::type($this->right);
-        }
+        $left = $this->getExprSide($expr->left, 'left');
+        $right = $this->getExprSide($expr->right, 'right');
         $opSignal = Stylizer::operation($this->getSignal($expr));
         return "($left $opSignal $right)";
+    }
+
+    private function getExprSide($expr, $side)
+    {
+        if ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
+            return $this->getExpr($expr);
+        } else if ($expr instanceof \PhpParser\Node\Expr\Variable) {
+            return Stylizer::variable("\${$expr->name}");
+        } elseif ($expr instanceof \PhpParser\Node\Expr\ConstFetch) {
+            return Stylizer::variable($expr->name);
+        } elseif ($expr instanceof \PhpParser\Node\Scalar\Encapsed) {
+            $enc = new \PhpTestBed\Node\Scalar\Encapsed($expr);
+            return $enc->getExpr();
+        }
+        return Stylizer::type($this->$side);
     }
 
     public function getSignal(\PhpParser\Node\Expr\BinaryOp $expr)
