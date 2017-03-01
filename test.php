@@ -1,7 +1,14 @@
 <?php
 
+const FILE = 'test', TYPE = 'php';
+
 $a = 10;
+
+echo "Ola $a Jow " . FILE . TYPE;
+
 $d = $a << 2;
+
+echo "Teste $a $d";
 echo $a + $d + 1 * 5 / 2;
 $c = $a + 5 + 2;
 $b = $a > 5;

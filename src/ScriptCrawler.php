@@ -46,7 +46,7 @@ class ScriptCrawler
         $this->printMessage(I18n::getInstance()->get('messages.start'));
         $this->crawl($this->nodes);
         $this->printMessage(I18n::getInstance()->get('messages.end'));
-        var_dump(Repository::getInstance()->getRepository());
+        var_dump(Repository::getInstance()->getVariables());
         var_dump($this->nodes);
         if ($this->returnMessages) {
             return $this->messages;
