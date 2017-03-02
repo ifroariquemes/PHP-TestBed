@@ -87,6 +87,8 @@ class BinaryOp
             return $this->getExpr($expr);
         } else if ($expr instanceof \PhpParser\Node\Expr\Variable) {
             return Stylizer::variable("\${$expr->name}");
+        } else if ($expr instanceof \PhpParser\Node\Expr\PostInc || $expr instanceof \PhpParser\Node\Expr\PreInc) {
+            return Stylizer::variable("\${$expr->var->name}");
         } elseif ($expr instanceof \PhpParser\Node\Expr\ConstFetch) {
             return Stylizer::variable($expr->name);
         } elseif ($expr instanceof \PhpParser\Node\Scalar\Encapsed) {

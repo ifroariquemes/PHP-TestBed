@@ -18,10 +18,12 @@ $f = $d ^ $e;
 $ola = $a;
 $test = 1;
 $theInc = 1;
+echo $a;
 while ($test <= 10) {
     echo "olá";
-    ++$test;
+    echo ++$test . 'aho';
     $inc = $theInc++;
+    echo $inc++;
 }
 
 for ($i = 0; $i < $a; $i++) {

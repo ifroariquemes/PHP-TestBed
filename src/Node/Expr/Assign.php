@@ -4,6 +4,7 @@ namespace PhpTestBed\Node\Expr;
 
 use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
+use PhpTestBed\Repository;
 
 class Assign extends \PhpTestBed\ResolverAbstract
 {
@@ -52,22 +53,24 @@ class Assign extends \PhpTestBed\ResolverAbstract
     {
         if ($this->node->expr instanceof \PhpParser\Node\Scalar) {
             $this->printScalar($this->node->var->name, $this->node->expr->value);
-            \PhpTestBed\Repository::getInstance()->set($this->node->var->name, $this->node->expr->value);
+            Repository::getInstance()->set($this->node->var->name, $this->node->expr->value);
         } elseif ($this->node->expr instanceof \PhpParser\Node\Expr\PostInc) {
             $pValue = \PhpTestBed\Repository::getInstance()->get($this->node->expr->var->name);
             $this->printVariable($this->node->var->name, $pValue, $this->node->expr->var->name);
+            Repository::getInstance()->set($this->node->var->name, $pValue);
             new PostInc($this->node->expr);
         } elseif ($this->node->expr instanceof \PhpParser\Node\Expr\PreInc) {
             $pInc = new PreInc($this->node->expr);
             $this->printVariable($this->node->var->name, $pInc->getValue(), $this->node->expr->var->name);
+            Repository::getInstance()->set($this->node->var->name, $pInc->getValue());
         } elseif ($this->node->expr instanceof \PhpParser\Node\Expr\Variable) {
             $currentValue = \PhpTestBed\Repository::getInstance()->get($this->node->expr->name);
             $this->printVariable($this->node->var->name, $currentValue, $this->node->expr->name);
-            \PhpTestBed\Repository::getInstance()->set($this->node->var->name, $currentValue);
+            Repository::getInstance()->set($this->node->var->name, $currentValue);
         } elseif ($this->node->expr instanceof \PhpParser\Node\Expr\BinaryOp) {
             $bOp = new BinaryOp($this->node->expr);
             $this->printOperation($this->node->var->name, $bOp->message());
-            \PhpTestBed\Repository::getInstance()
+            Repository::getInstance()
                     ->set($this->node->var->name, $bOp->getResult());
         }
     }
