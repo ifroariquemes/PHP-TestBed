@@ -15,10 +15,13 @@ $b = $a > 5;
 $e = 255;
 $f = $d ^ $e;
 
+$ola = $a;
 $test = 1;
+$theInc = 1;
 while ($test <= 10) {
     echo "olá";
-    $test++;
+    ++$test;
+    $inc = $theInc++;
 }
 
 for ($i = 0; $i < $a; $i++) {

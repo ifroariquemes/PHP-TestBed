@@ -13,42 +13,60 @@ class Assign extends \PhpTestBed\ResolverAbstract
         parent::__construct($statement);
     }
 
+    private function printScalar($var, $value)
+    {
+        $this->printMessage(I18n::getInstance()->get('code.assign', [
+                    'var' => Stylizer::variable($var),
+                    'value' => Stylizer::value($value)
+        ]));
+    }
+
+    private function printOperation($var, $expr)
+    {
+        $this->printMessage(I18n::getInstance()->get('code.assign-op', [
+                    'var' => Stylizer::variable($var),
+                    'value' => $expr
+        ]));
+    }
+
+    private function printVariable($var, $value, $refVar)
+    {
+        $left = Stylizer::variable("\${$var}");
+        $opSignal = Stylizer::operation("=");
+        $right = Stylizer::variable("\${$refVar}");
+        $valueSt = Stylizer::type($value);
+        $expr = Stylizer::expression("($left $opSignal $right)");
+        $bVar = [
+            'value' => $valueSt,
+            'expr' => $expr,
+            'where' => "$right $opSignal $valueSt"
+        ];
+        $aVar = [
+            'var' => $left,
+            'value' => I18n::getInstance()->get('code.binary-op-var', $bVar)
+        ];
+        $this->printMessage(I18n::getInstance()->get('code.assign-op', $aVar));
+    }
+
     protected function resolve()
     {
         if ($this->node->expr instanceof \PhpParser\Node\Scalar) {
-            $mVar = [
-                'var' => Stylizer::variable("\${$this->node->var->name}"),
-                'value' => Stylizer::value($this->node->expr->value)
-            ];
-            $this->printMessage(I18n::getInstance()->get('code.assign', $mVar));
-            \PhpTestBed\Repository::getInstance()
-                    ->set($this->node->var->name
-                            , $this->node->expr->value);
+            $this->printScalar($this->node->var->name, $this->node->expr->value);
+            \PhpTestBed\Repository::getInstance()->set($this->node->var->name, $this->node->expr->value);
+        } elseif ($this->node->expr instanceof \PhpParser\Node\Expr\PostInc) {
+            $pValue = \PhpTestBed\Repository::getInstance()->get($this->node->expr->var->name);
+            $this->printVariable($this->node->var->name, $pValue, $this->node->expr->var->name);
+            new PostInc($this->node->expr);
+        } elseif ($this->node->expr instanceof \PhpParser\Node\Expr\PreInc) {
+            $pInc = new PreInc($this->node->expr);
+            $this->printVariable($this->node->var->name, $pInc->getValue(), $this->node->expr->var->name);
         } elseif ($this->node->expr instanceof \PhpParser\Node\Expr\Variable) {
             $currentValue = \PhpTestBed\Repository::getInstance()->get($this->node->expr->name);
-            $left = Stylizer::variable("\${$this->node->var->name}");
-            $opSignal = Stylizer::operation("=");
-            $right = Stylizer::variable("\${$this->node->expr->name}");
-            $value = Stylizer::type($currentValue);
-            $expr = Stylizer::expression("($left $opSignal $right)");
-            $bVar = [
-                'value' => $value,
-                'expr' => $expr,
-                'where' => "$right $opSignal $value"
-            ];
-            $aVar = [
-                'var' => $left,
-                'value' => I18n::getInstance()->get('code.binary-op-var', $bVar)
-            ];
-            $this->printMessage(I18n::getInstance()->get('code.assign-op', $aVar));
+            $this->printVariable($this->node->var->name, $currentValue, $this->node->expr->name);
             \PhpTestBed\Repository::getInstance()->set($this->node->var->name, $currentValue);
         } elseif ($this->node->expr instanceof \PhpParser\Node\Expr\BinaryOp) {
             $bOp = new BinaryOp($this->node->expr);
-            $mVar = [
-                'var' => Stylizer::variable("\${$this->node->var->name}"),
-                'value' => $bOp->message()
-            ];
-            $this->printMessage(I18n::getInstance()->get('code.assign-op', $mVar));
+            $this->printOperation($this->node->var->name, $bOp->message());
             \PhpTestBed\Repository::getInstance()
                     ->set($this->node->var->name, $bOp->getResult());
         }

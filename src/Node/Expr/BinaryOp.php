@@ -42,6 +42,14 @@ class BinaryOp
         } elseif ($bin instanceof \PhpParser\Node\Expr\ConstFetch) {
             $this->usedConsts[$bin->name->parts[0]] = \PhpTestBed\Repository::getInstance()->getConst($bin->name->parts[0]);
             return $this->usedConsts[$bin->name->parts[0]];
+        } else if ($bin instanceof \PhpParser\Node\Expr\PostInc) {
+            $this->usedVars[$bin->var->name] = \PhpTestBed\Repository::getInstance()->get($bin->var->name);
+            new PostInc($bin);
+            return $this->usedVars[$bin->var->name];
+        } else if ($bin instanceof \PhpParser\Node\Expr\PreInc) {
+            $pInc = new PreInc($bin);
+            $this->usedVars[$bin->var->name] = $pInc->getValue();
+            return $this->usedVars[$bin->var->name];
         } else {
             \PhpTestBed\ScriptCrawler::getInstance()->printMessage(
                     Stylizer::systemException(
