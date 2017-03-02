@@ -4,6 +4,7 @@ code:
     echo-scalar: Imprime na tela :value
     assign: A variável :var recebe o valor :value
     assign-op: A variável :var recebe :value
+    array: o conjunto de valores :value
     const: A constante :const recebe o valor :value
     array: o conjunto de valores :value
     binary-op: o valor :value resultante da operação :expr
@@ -27,5 +28,9 @@ exceptions:
 messages:
     start: Script iniciado
     end: Script finalizado
+legend:
+    array-key-position: Chave/Posição
+    array-value: Valor
+    array-empty: vazio
 config:
     timestamp: d/m/Y H:i:s.u

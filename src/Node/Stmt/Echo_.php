@@ -51,7 +51,10 @@ class Echo_ extends \PhpTestBed\ResolverAbstract
     protected function resolve()
     {
         foreach ($this->node->exprs as $expr) {
-            if ($expr instanceof \PhpParser\Node\Scalar\Encapsed) {
+            if ($expr instanceof \PhpParser\Node\Expr\Assign) {
+                $asgn = new \PhpTestBed\Node\Expr\Assign($expr);
+                $this->printVariable($asgn->getVarName(), $asgn->getValue());
+            } elseif ($expr instanceof \PhpParser\Node\Scalar\Encapsed) {
                 $enc = new \PhpTestBed\Node\Scalar\Encapsed($expr);
                 $this->printOperation($enc->getResult(), $enc->getExpr(), $enc->getUsedVars());
             } elseif ($expr instanceof \PhpParser\Node\Scalar) {

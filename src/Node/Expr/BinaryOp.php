@@ -13,22 +13,29 @@ class BinaryOp
     private $right;
     private $usedVars;
     private $usedConsts;
+    private $usedArrays;
     private $result;
 
-    public function __construct(\PhpParser\Node\Expr\BinaryOp $expr, array &$usedVars = array(), array &$usedConsts = array())
+    public function __construct(\PhpParser\Node\Expr\BinaryOp $expr, array &$usedVars = array(), array &$usedConsts = array(), array &$usedArrays = array())
     {
 
         $this->expr = $expr;
         $this->usedVars = &$usedVars;
         $this->usedConsts = &$usedConsts;
+        $this->usedArrays = &$usedArrays;
         $this->left = $this->resolve($expr->left);
         $this->right = $this->resolve($expr->right);
     }
 
     private function resolve(\PhpParser\Node\Expr $bin)
     {
-        if ($bin instanceof \PhpParser\Node\Expr\BinaryOp) {
-            $nExpr = new BinaryOp($bin, $this->usedVars, $this->usedConsts);
+        if ($bin instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            $item = \PhpTestBed\Repository::getInstance()->get($bin->var->name);
+            $key = $bin->dim->value;
+            array_push($this->usedArrays, ['var' => $bin->var->name, 'key' => $key, 'value' => $item[$key]]);
+            return $item[$key];
+        } elseif ($bin instanceof \PhpParser\Node\Expr\BinaryOp) {
+            $nExpr = new BinaryOp($bin, $this->usedVars, $this->usedConsts, $this->usedArrays);
             return $nExpr->getResult();
         } elseif ($bin instanceof \PhpParser\Node\Expr\Variable) {
             $this->usedVars[$bin->name] = \PhpTestBed\Repository::getInstance()->get($bin->name);
@@ -73,7 +80,7 @@ class BinaryOp
         $mVar = [
             'expr' => Stylizer::expression($this->getExpr($this->expr)),
             'value' => Stylizer::value($this->getResult()),
-            'where' => \PhpTestBed\Repository::showUsed($this->usedConsts, $this->usedVars)
+            'where' => \PhpTestBed\Repository::showUsed($this->usedConsts, $this->usedVars, $this->usedArrays)
         ];
         if (empty($mVar['where'])) {
             return I18n::getInstance()->get('code.binary-op', $mVar);
@@ -91,7 +98,10 @@ class BinaryOp
 
     private function getExprSide($expr, $side)
     {
-        if ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
+        if ($expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            $key = Stylizer::type($expr->dim->value);
+            return Stylizer::variable("\${$expr->var->name}") . "[$key]";
+        } elseif ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
             return $this->getExpr($expr);
         } else if ($expr instanceof \PhpParser\Node\Expr\Variable) {
             return Stylizer::variable("\${$expr->name}");
