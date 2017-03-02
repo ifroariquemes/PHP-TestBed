@@ -63,6 +63,15 @@ class Assign extends \PhpTestBed\ResolverAbstract
             $pInc = new PreInc($this->node->expr);
             $this->printVariable($this->node->var->name, $pInc->getValue(), $this->node->expr->var->name);
             Repository::getInstance()->set($this->node->var->name, $pInc->getValue());
+        } elseif ($this->node->expr instanceof \PhpParser\Node\Expr\PostDec) {
+            $pValue = \PhpTestBed\Repository::getInstance()->get($this->node->expr->var->name);
+            $this->printVariable($this->node->var->name, $pValue, $this->node->expr->var->name);
+            Repository::getInstance()->set($this->node->var->name, $pValue);
+            new PostDec($this->node->expr);
+        } elseif ($this->node->expr instanceof \PhpParser\Node\Expr\PreDec) {
+            $pDec = new PreDec($this->node->expr);
+            $this->printVariable($this->node->var->name, $pDec->getValue(), $this->node->expr->var->name);
+            Repository::getInstance()->set($this->node->var->name, $pDec->getValue());
         } elseif ($this->node->expr instanceof \PhpParser\Node\Expr\Variable) {
             $currentValue = \PhpTestBed\Repository::getInstance()->get($this->node->expr->name);
             $this->printVariable($this->node->var->name, $currentValue, $this->node->expr->name);

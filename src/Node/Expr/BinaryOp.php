@@ -50,6 +50,14 @@ class BinaryOp
             $pInc = new PreInc($bin);
             $this->usedVars[$bin->var->name] = $pInc->getValue();
             return $this->usedVars[$bin->var->name];
+        } else if ($bin instanceof \PhpParser\Node\Expr\PostDec) {
+            $this->usedVars[$bin->var->name] = \PhpTestBed\Repository::getInstance()->get($bin->var->name);
+            new PostDec($bin);
+            return $this->usedVars[$bin->var->name];
+        } else if ($bin instanceof \PhpParser\Node\Expr\PreDec) {
+            $pInc = new PreDec($bin);
+            $this->usedVars[$bin->var->name] = $pInc->getValue();
+            return $this->usedVars[$bin->var->name];
         } else {
             \PhpTestBed\ScriptCrawler::getInstance()->printMessage(
                     Stylizer::systemException(
@@ -87,7 +95,10 @@ class BinaryOp
             return $this->getExpr($expr);
         } else if ($expr instanceof \PhpParser\Node\Expr\Variable) {
             return Stylizer::variable("\${$expr->name}");
-        } else if ($expr instanceof \PhpParser\Node\Expr\PostInc || $expr instanceof \PhpParser\Node\Expr\PreInc) {
+        } else if ($expr instanceof \PhpParser\Node\Expr\PostInc ||
+                $expr instanceof \PhpParser\Node\Expr\PreInc ||
+                $expr instanceof \PhpParser\Node\Expr\PostDec ||
+                $expr instanceof \PhpParser\Node\Expr\PreDec) {
             return Stylizer::variable("\${$expr->var->name}");
         } elseif ($expr instanceof \PhpParser\Node\Expr\ConstFetch) {
             return Stylizer::variable($expr->name);

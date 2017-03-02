@@ -16,17 +16,17 @@ $e = 255;
 $f = $d ^ $e;
 
 $ola = $a;
-$test = 1;
+$test = 15;
 $theInc = 1;
 echo $a;
-while ($test <= 10) {
+while ($test >= 10) {
     echo "olá";
-    echo ++$test . 'aho';
-    $inc = $theInc++;
-    echo $inc++;
+    echo --$test . 'aho';
+    $inc = $theInc--;
+    echo $inc--;
 }
 
-for ($i = 0; $i < $a; $i++) {
+for ($i = 15; $i > $a; $i--) {
     $b = $i;
     //   echo $b + 1;
 }

@@ -63,10 +63,20 @@ class Echo_ extends \PhpTestBed\ResolverAbstract
                 $pValue = \PhpTestBed\Repository::getInstance()->get($expr->var->name);
                 $varName = Stylizer::variable("\${$expr->var->name}");
                 $this->printOperation($pValue, "($varName)", [$expr->var->name => $pValue]);
+                new \PhpTestBed\Node\Expr\PostInc($expr);
             } elseif ($expr instanceof \PhpParser\Node\Expr\PreInc) {
                 $pInc = new \PhpTestBed\Node\Expr\PreInc($expr);
                 $varName = Stylizer::variable("\${$expr->var->name}");
                 $this->printOperation($pInc->getValue(), "($varName)", [$expr->var->name => $pInc->getValue()]);
+            } elseif ($expr instanceof \PhpParser\Node\Expr\PostDec) {
+                $pValue = \PhpTestBed\Repository::getInstance()->get($expr->var->name);
+                $varName = Stylizer::variable("\${$expr->var->name}");
+                $this->printOperation($pValue, "($varName)", [$expr->var->name => $pValue]);
+                new \PhpTestBed\Node\Expr\PostDec($expr);
+            } elseif ($expr instanceof \PhpParser\Node\Expr\PreDec) {
+                $pDec = new \PhpTestBed\Node\Expr\PreDec($expr);
+                $varName = Stylizer::variable("\${$expr->var->name}");
+                $this->printOperation($pDec->getValue(), "($varName)", [$expr->var->name => $pDec->getValue()]);
             } else {
                 $line = new \PhpTestBed\Node\Expr\BinaryOp($expr);
                 $this->printMessage(sprintf('%s %s', I18n::getInstance()->get('code.echo'), $line->message()));
