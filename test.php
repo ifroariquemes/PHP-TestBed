@@ -1,8 +1,12 @@
 <?php
 
+global $a1, $b1;
+
 const FILE = 'test', TYPE = 'php';
 
 $a = 10;
+
+$b1 = $a1 + $a;
 
 echo "Ola $a Jow " . FILE . TYPE;
 
