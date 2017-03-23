@@ -5,6 +5,7 @@ code:
     assign: A variável :var recebe o valor :value
     assign-op: A variável :var recebe :value
     array: o conjunto de valores :value
+    array-op: o conjunto de valores :value resultante da operação :expr
     const: A constante :const recebe o valor :value
     binary-op: o valor :value resultante da operação :expr
     binary-op-var: o valor :value resultante da operação :expr onde :where

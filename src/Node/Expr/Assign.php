@@ -35,7 +35,7 @@ class Assign extends \PhpTestBed\ResolverAbstract
         ]));
     }
 
-    private function printArray($items)
+    private function printArray($items, $expr = null)
     {
         $itemSt = '';
         if (!empty($items)) {
@@ -63,12 +63,13 @@ ARRAY_TABLE;
         } else {
             $valueSt = I18n::getInstance()->get('legend.array-empty');
         }
-
+        $codeArray = (is_null($expr)) ? 'code.array' : 'code.array-op';
         $this->printMessage(I18n::getInstance()->get('code.assign-op', [
                     'var' => Stylizer::variable("\${$this->varName}"),
-                    'value' => I18n::getInstance()->get('code.array', [
-                        'value' => $valueSt
-                    ])
+                    'value' => I18n::getInstance()->get($codeArray, [
+                        'value' => $valueSt,
+                        'expr' => Stylizer::expression($expr)
+                    ]),
         ]));
     }
 
@@ -115,6 +116,7 @@ ARRAY_TABLE;
                 $this->resolvePreIncDec();
                 break;
             case \PhpParser\Node\Expr\Variable::class:
+                $this->resolveVariable();
                 break;
             default:
                 if ($this->node->expr instanceof \PhpParser\Node\Scalar) {
@@ -166,7 +168,15 @@ ARRAY_TABLE;
     private function resolveVariable()
     {
         $currentValue = \PhpTestBed\Repository::getInstance()->get($this->node->expr->name);
-        $this->printVariable($currentValue, $this->node->expr->name);
+        switch (gettype($currentValue)) {
+            case 'array':
+                $expr = sprintf('(%s %s %s)', Stylizer::variable("\$$this->varName"), Stylizer::operation('='), Stylizer::variable("\${$this->node->expr->name}"));
+                $this->printArray($currentValue, $expr);
+                break;
+            default:
+                $this->printVariable($currentValue, $this->node->expr->name);
+                break;
+        }
         Repository::getInstance()->set($this->varName, $currentValue);
     }
 
