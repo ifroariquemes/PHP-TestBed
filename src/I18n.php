@@ -18,9 +18,15 @@ class I18n
         $this->locale = $locale;
     }
 
+    public static function setLocale($locale)
+    {
+        self::getInstance($locale);
+    }
+
     public function get($key, $vars = array(), $count = 1)
     {
-        return $this->i18n->get($this->locale, "app.$key", $vars, $count);
+        $ret = $this->i18n->get($this->locale, "app.$key", $vars, $count);
+        return (!empty($ret)) ? $ret : "Index $key not set for current locale ($this->locale)";
     }
 
 }

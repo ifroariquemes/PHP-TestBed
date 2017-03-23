@@ -17,6 +17,7 @@ class ScriptCrawler
     private $useTimestamp;
     private $returnMessages;
     private $messages;
+    private $break;
 
     public function __construct($options)
     {
@@ -31,6 +32,7 @@ class ScriptCrawler
         $this->messages = array();
         $this->useTimestamp = (is_array($options)) ? $options['timestamp'] ?? true : true;
         $this->returnMessages = (is_array($options)) ? $options['return'] ?? false : false;
+        $this->break = false;
         $this->parseScript();
     }
 
@@ -56,6 +58,9 @@ class ScriptCrawler
     public function crawl(array $nodes)
     {
         foreach ($nodes as $node) {
+            if ($this->getBreak()) {
+                break;
+            }
             $nodeClass = str_replace('PhpParser\\', 'PhpTestBed\\', get_class($node));
             if (!class_exists($nodeClass)) {
                 $this->printMessage(
@@ -115,6 +120,21 @@ class ScriptCrawler
             throw new Exception("Level cannot be reduced below zero.");
         }
         $this->level--;
+    }
+
+    public function callBreak()
+    {
+        $this->break = true;
+    }
+
+    public function getBreak()
+    {
+        return $this->break;
+    }
+
+    public function removeBreak()
+    {
+        $this->break = false;
     }
 
 }

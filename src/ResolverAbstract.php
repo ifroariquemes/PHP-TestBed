@@ -9,12 +9,19 @@ abstract class ResolverAbstract
      * @var \PhpParser\NodeAbstract
      */
     protected $node;
+
+    /**
+     * @var ResolverAbstract
+     */
+    protected $parentNode;
     protected $resolveState;
 
     public function __construct(\PhpParser\NodeAbstract $statement)
     {
         $this->node = $statement;
+        $this->printEnterMessage();
         $this->resolve();
+        $this->printExitMessage();
     }
 
     final public function setResolveState($resolveState)
@@ -35,7 +42,7 @@ abstract class ResolverAbstract
         }
     }
 
-    final public function printMessage($message, $overrideWithLine = 0)
+    final protected function printMessage($message, $overrideWithLine = 0)
     {
         if (!empty($message)) {
             ScriptCrawler::getInstance()->printMessage(
@@ -45,9 +52,26 @@ abstract class ResolverAbstract
         }
     }
 
+    final protected function printSystemMessage($message, $overrideWithLine = 0)
+    {
+        $this->printMessage(
+                Stylizer::systemMessage($message), $overrideWithLine
+        );
+    }
+
+    protected function printEnterMessage()
+    {
+        
+    }
+
+    protected function printExitMessage()
+    {
+        
+    }
+
     protected function resolve()
     {
-        throw new \Exception("Class must contain ::resolve() method");
+        throw new Exception('Class ' . __CLASS__ . ' must implements its ::resolve() method.');
     }
 
 }

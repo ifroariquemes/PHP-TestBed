@@ -43,7 +43,7 @@ class Repository
         $this->constants[$key] = $value;
     }
 
-    public static function showUsed(array $consts, array $vars)
+    public static function showUsed(array $consts, array $vars, array $arrays = null)
     {
         $used = '';
         foreach ($consts as $const => $value) {
@@ -57,6 +57,15 @@ class Repository
                     , Stylizer::variable("$$var")
                     , Stylizer::operation('=')
                     , Stylizer::type($value));
+        }
+        if (!is_null($arrays)) {
+            foreach ($arrays as $arr) {
+                $key = Stylizer::type($arr['key']);
+                $used .= sprintf('%s %s %s, '
+                        , Stylizer::variable("\${$arr['var']}") . "[$key]"
+                        , Stylizer::operation('=')
+                        , Stylizer::type($arr['value']));
+            }
         }
         if (!empty($used)) {
             $used = substr($used, 0, -2);

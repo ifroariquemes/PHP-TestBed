@@ -5,12 +5,12 @@ namespace PhpTestBed\Node\Expr;
 use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
 
-class PostInc extends \PhpTestBed\ResolverAbstract
+class PreDec extends \PhpTestBed\ResolverAbstract
 {
 
     private $value;
 
-    public function __construct(\PhpParser\Node\Expr\PostInc $node)
+    public function __construct(\PhpParser\Node\Expr\PreDec $node)
     {
         parent::__construct($node);
     }
@@ -20,9 +20,9 @@ class PostInc extends \PhpTestBed\ResolverAbstract
         $this->value = \PhpTestBed\Repository::getInstance()->get($this->node->var->name);
         $mVar = [
             'var' => Stylizer::variable("\${$this->node->var->name}"),
-            'value' => Stylizer::value( ++$this->value)
+            'value' => Stylizer::value( --$this->value)
         ];
-        $this->printMessage(I18n::getInstance()->get('code.post-inc', $mVar));
+        $this->printMessage(I18n::getInstance()->get('code.post-dec', $mVar));
         \PhpTestBed\Repository::getInstance()
                 ->set($this->node->var->name, $this->value);
     }

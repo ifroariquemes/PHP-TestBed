@@ -4,8 +4,9 @@ code:
     echo-scalar: Imprime na tela :value
     assign: A variável :var recebe o valor :value
     assign-op: A variável :var recebe :value
-    const: A constante :const recebe o valor :value
     array: o conjunto de valores :value
+    array-op: o conjunto de valores :value resultante da operação :expr
+    const: A constante :const recebe o valor :value
     binary-op: o valor :value resultante da operação :expr
     binary-op-var: o valor :value resultante da operação :expr onde :where
     do-while-enter: --- Entrou no laço DO-WHILE ---
@@ -15,17 +16,30 @@ code:
     if-enter: --- Entrou na condicional IF ---
     if-exit: --- Saiu da condicional IF ---
     if-cond: A condição da estrutura retorna
-    else-cond: Nenhuma condição satisfeita executa o bloco else
+    else-cond: Nenhuma condição satisfeita, executa o bloco else
     for-enter: --- Entrou no laço FOR ---
     for-exit: --- Saiu do laço FOR ---
     loop-cond: A condição do laço retorna    
     post-inc: A variável :var tem seu valor incrementado para :value
     post-dec: A variável :var tem seu valor decrementado para :value
+    switch-cond: Começa a testar no switch
+    switch-case-success: Entra no caso com valor :value pois este é o valor de :cond
+    switch-case-fail: Rejeita o caso com valor :value pois este não é o valor de :cond
+    switch-case-default: Entra no caso padrão
+    switch-enter: --- Entrou na condicional SWITCH ---
+    switch-exit: --- Saiu da condicional SWITCH ---
+    switch-case-enter: --- Entrou em um caso SWITCH ---
+    switch-case-exit: --- Saiu do caso SWITCH ---
+    break: Realizada solicitação de parada na execução do bloco atual
 exceptions:
     script-not-found: Script :script não foi encontrado
     node-not-implemented: A resolução de :node ainda não foi implementada
 messages:
     start: Script iniciado
     end: Script finalizado
+legend:
+    array-key-position: Chave/Posição
+    array-value: Valor
+    array-empty: vazio
 config:
     timestamp: d/m/Y H:i:s.u

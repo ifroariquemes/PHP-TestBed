@@ -13,15 +13,20 @@ class Const_ extends \PhpTestBed\ResolverAbstract
         parent::__construct($node);
     }
 
+    private function printConst($name, $value)
+    {
+        $mVar = [
+            'const' => Stylizer::variable($name),
+            'value' => Stylizer::value($value)
+        ];
+        $this->printMessage(I18n::getInstance()->get('code.const', $mVar));
+    }
+
     protected function resolve()
     {
         foreach ($this->node->consts as $expr) {
             if ($expr->value instanceof \PhpParser\Node\Scalar) {
-                $mVar = [
-                    'const' => Stylizer::variable($expr->name),
-                    'value' => Stylizer::value($expr->value->value)
-                ];
-                $this->printMessage(I18n::getInstance()->get('code.const', $mVar));
+                $this->printConst($expr->name, $expr->value->value);
                 \PhpTestBed\Repository::getInstance()->setConst($expr->name, $expr->value->value);
             }
         }

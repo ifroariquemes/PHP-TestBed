@@ -43,7 +43,7 @@ class Encapsed extends \PhpTestBed\ResolverAbstract
                 case \PhpParser\Node\Expr\Variable::class:
                     $value = \PhpTestBed\Repository::getInstance()->get($expr->name);
                     $this->result .= $value;
-                    $this->expr .= Stylizer::variable("\${$expr->name}");
+                    $this->expr .= Stylizer::variable($expr->name);
                     $this->usedVars[$expr->name] = $value;
                     break;
             }

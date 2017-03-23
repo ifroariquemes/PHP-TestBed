@@ -3,25 +3,32 @@
 namespace PhpTestBed\Node\Stmt;
 
 use PhpTestBed\I18n;
-use PhpTestBed\Stylizer;
 
 class ElseIf_ extends \PhpTestBed\ResolverAbstract
 {
+
+    private $condition;
 
     public function __construct(\PhpParser\Node\Stmt\ElseIf_ $node)
     {
         parent::__construct($node);
     }
 
-    protected function resolve()
+    private function printIfCond()
     {
-        $binOp = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
         $this->printMessage(
                 I18n::getInstance()->get('code.if-cond') . ' ' .
-                $binOp->message()
+                $this->condition->message()
         );
-        if ($binOp->getResult()) {
-            \PhpTestBed\ScriptCrawler::getInstance()->crawl($this->node->stmts);
+    }
+
+    protected function resolve()
+    {
+        $scriptCrawler = \PhpTestBed\ScriptCrawler::getInstance();
+        $this->condition = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
+        $this->printIfCond();
+        if ($this->condition->getResult()) {
+            $scriptCrawler->crawl($this->node->stmts);
             $this->setResolveState(true);
         } else {
             $this->setResolveState(false);

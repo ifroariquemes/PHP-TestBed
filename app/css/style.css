@@ -9,6 +9,7 @@ body {
 .testbed-message {
     display: inline-block;
     line-height: 2em;
+    position: relative;
 }
 
 .testbed-expression {
@@ -32,3 +33,13 @@ body {
 .testbed-type-float, 
 .testbed-type-double,
 .testbed-type-integer { color: #FF00FF }
+
+.testbed-array { 
+    border-collapse: collapse;
+    display: inline-table;
+    margin-bottom: 15px;
+}
+.testbed-array td, .testbed-array th{
+    border: 1px solid white;
+    
+}

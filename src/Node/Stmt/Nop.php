@@ -2,9 +2,6 @@
 
 namespace PhpTestBed\Node\Stmt;
 
-use PhpTestBed\I18n;
-use PhpTestBed\Stylizer;
-
 class Nop extends \PhpTestBed\ResolverAbstract
 {
 
