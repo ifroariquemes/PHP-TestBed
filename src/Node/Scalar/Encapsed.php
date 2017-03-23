@@ -5,7 +5,7 @@ namespace PhpTestBed\Node\Scalar;
 use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
 
-class Encapsed extends \PhpTestBed\ResolverAbstract
+class Encapsed extends \PhpTestBed\Node\ResolverAbstract
 {
 
     private $result = '';

@@ -5,7 +5,7 @@ namespace PhpTestBed\Node\Expr;
 use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
 
-class PreInc extends \PhpTestBed\ResolverAbstract
+class PreInc extends \PhpTestBed\Node\ResolverAbstract
 {
 
     private $value;

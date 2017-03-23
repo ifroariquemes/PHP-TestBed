@@ -5,7 +5,7 @@ namespace PhpTestBed\Node\Stmt;
 use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
 
-class Echo_ extends \PhpTestBed\ResolverAbstract
+class Echo_ extends \PhpTestBed\Node\ResolverAbstract
 {
 
     public function __construct(\PhpParser\Node\Stmt\Echo_ $node)
@@ -48,6 +48,26 @@ class Echo_ extends \PhpTestBed\ResolverAbstract
         $this->printMessage(I18n::getInstance()->get('code.echo-scalar', $mVar));
     }
 
+    private function printArrayDim($var, $keys, $value)
+    {
+        $keyStyle = '';
+        foreach($keys as $key) {
+            $keyStyle .= sprintf('[%s]', Stylizer::type($key));
+        }
+        $varName = Stylizer::variable("\${$var}") . $keyStyle;
+        $eVar = [
+            'value' => Stylizer::value($value),
+            'expr' => Stylizer::expression("($varName)"),
+            'where' => \PhpTestBed\Repository::showUsed([], [], [
+                ['var' => $var, 'key' => $keys, 'value' => $value]
+            ])
+        ];
+        $mVar = [
+            'value' => I18n::getInstance()->get('code.binary-op-var', $eVar)
+        ];
+        $this->printMessage(I18n::getInstance()->get('code.echo-scalar', $mVar));
+    }
+
     private function printEcho(\PhpParser\Node\Expr\BinaryOp $expr)
     {
         $line = new \PhpTestBed\Node\Expr\BinaryOp($expr);
@@ -66,8 +86,8 @@ class Echo_ extends \PhpTestBed\ResolverAbstract
             } elseif ($expr instanceof \PhpParser\Node\Scalar) {
                 $this->printScalar($expr->value);
             } elseif ($expr instanceof \PhpParser\Node\Expr\Variable) {
-                $value = \PhpTestBed\Repository::getInstance()->get($expr->name);
-                $this->printVariable($expr->name, $value);
+                $item = \PhpTestBed\Repository::getInstance()->get($expr->name);
+                $this->printVariable($expr->name, $item);
             } elseif ($expr instanceof \PhpParser\Node\Expr\PostInc) {
                 $pValue = \PhpTestBed\Repository::getInstance()->get($expr->var->name);
                 $varName = Stylizer::variable($expr->var->name);
@@ -86,6 +106,9 @@ class Echo_ extends \PhpTestBed\ResolverAbstract
                 $pDec = new \PhpTestBed\Node\Expr\PreDec($expr);
                 $varName = Stylizer::variable($expr->var->name);
                 $this->printOperation($pDec->getValue(), $varName, [$expr->var->name => $pDec->getValue()]);
+            } elseif ($expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+                $arrayDim = new \PhpTestBed\Node\Expr\ArrayDimFetch($expr);
+                $this->printArrayDim($arrayDim->getVarName(), $arrayDim->getKeys(), $arrayDim->getResult());
             } else {
                 $this->printEcho($expr);
             }

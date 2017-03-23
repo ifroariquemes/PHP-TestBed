@@ -6,7 +6,7 @@ use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
 use PhpTestBed\Repository;
 
-class Assign extends \PhpTestBed\ResolverAbstract
+class Assign extends \PhpTestBed\Node\ResolverAbstract
 {
 
     private $varName;
@@ -35,13 +35,13 @@ class Assign extends \PhpTestBed\ResolverAbstract
         ]));
     }
 
-    private function printArray($items, $expr = null)
+    public static function prepareArrayToPrint($items)
     {
         $itemSt = '';
         if (!empty($items)) {
             foreach ($items as $key => $value) {
                 $theKey = Stylizer::type($key);
-                $theValue = Stylizer::type($value);
+                $theValue = (!is_array($value)) ? Stylizer::type($value) : self::prepareArrayToPrint($value);
                 $itemSt .= <<<ARRAY_LINE
 <tr>
     <td>$theKey</td>
@@ -51,7 +51,7 @@ ARRAY_LINE;
             }
             $arKeyPosition = I18n::getInstance()->get('legend.array-key-position');
             $arValue = I18n::getInstance()->get('legend.array-value');
-            $valueSt = <<<ARRAY_TABLE
+            return <<<ARRAY_TABLE
 <table class="testbed-array">
     <tr>
         <th>$arKeyPosition</th>
@@ -61,13 +61,17 @@ ARRAY_LINE;
 </table>
 ARRAY_TABLE;
         } else {
-            $valueSt = I18n::getInstance()->get('legend.array-empty');
+            return I18n::getInstance()->get('legend.array-empty');
         }
+    }
+
+    private function printArray($items, $expr = null)
+    {
         $codeArray = (is_null($expr)) ? 'code.array' : 'code.array-op';
         $this->printMessage(I18n::getInstance()->get('code.assign-op', [
                     'var' => Stylizer::variable("\${$this->varName}"),
                     'value' => I18n::getInstance()->get($codeArray, [
-                        'value' => $valueSt,
+                        'value' => $this->prepareArrayToPrint($items),
                         'expr' => Stylizer::expression($expr)
                     ]),
         ]));

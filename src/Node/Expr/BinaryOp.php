@@ -30,10 +30,9 @@ class BinaryOp
     private function resolve(\PhpParser\Node\Expr $bin)
     {
         if ($bin instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            $item = \PhpTestBed\Repository::getInstance()->get($bin->var->name);
-            $key = $bin->dim->value;
-            array_push($this->usedArrays, ['var' => $bin->var->name, 'key' => $key, 'value' => $item[$key]]);
-            return $item[$key];
+            $arrayDim = new ArrayDimFetch($bin);
+            array_push($this->usedArrays, ['var' => $arrayDim->getVarName(), 'key' => $arrayDim->getKeys(), 'value' => $arrayDim->getResult()]);
+            return $arrayDim->getResult();
         } elseif ($bin instanceof \PhpParser\Node\Expr\BinaryOp) {
             $nExpr = new BinaryOp($bin, $this->usedVars, $this->usedConsts, $this->usedArrays);
             return $nExpr->getResult();
@@ -90,6 +89,7 @@ class BinaryOp
 
     public function getExpr(\PhpParser\Node\Expr $expr = null)
     {
+        $expr = is_null($expr) ? $this->expr : $expr;
         $left = $this->getExprSide($expr->left, 'left');
         $right = $this->getExprSide($expr->right, 'right');
         $opSignal = Stylizer::operation($this->getSignal($expr));
@@ -99,8 +99,7 @@ class BinaryOp
     private function getExprSide($expr, $side)
     {
         if ($expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            $key = Stylizer::type($expr->dim->value);
-            return Stylizer::variable("\${$expr->var->name}") . "[$key]";
+            return (new ArrayDimFetch($expr))->getExpr();
         } elseif ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
             return $this->getExpr($expr);
         } else if ($expr instanceof \PhpParser\Node\Expr\Variable) {
@@ -111,7 +110,7 @@ class BinaryOp
                 $expr instanceof \PhpParser\Node\Expr\PreDec) {
             return Stylizer::variable("\${$expr->var->name}");
         } elseif ($expr instanceof \PhpParser\Node\Expr\ConstFetch) {
-            return Stylizer::variable($expr->name);
+            return Stylizer::constant($expr->name);
         } elseif ($expr instanceof \PhpParser\Node\Scalar\Encapsed) {
             $enc = new \PhpTestBed\Node\Scalar\Encapsed($expr);
             return $enc->getExpr();

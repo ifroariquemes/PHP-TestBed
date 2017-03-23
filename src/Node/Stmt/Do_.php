@@ -4,7 +4,7 @@ namespace PhpTestBed\Node\Stmt;
 
 use PhpTestBed\I18n;
 
-class Do_ extends \PhpTestBed\ResolverAbstract
+class Do_ extends \PhpTestBed\Node\ResolverAbstract
 {
 
     private $condition;
@@ -42,7 +42,7 @@ class Do_ extends \PhpTestBed\ResolverAbstract
                 if ($scriptCrawler->getBreak()) {
                     break;
                 }
-                $this->condition = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
+                $this->condition = \PhpTestBed\Node\ResolverCondition::choose($this->node->cond);
                 $this->printLoopCond();
             } while ($this->condition->getResult());
         }
