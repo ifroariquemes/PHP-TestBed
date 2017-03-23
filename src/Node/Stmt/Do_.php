@@ -3,42 +3,51 @@
 namespace PhpTestBed\Node\Stmt;
 
 use PhpTestBed\I18n;
-use PhpTestBed\Stylizer;
 
 class Do_ extends \PhpTestBed\ResolverAbstract
 {
+
+    private $condition;
 
     public function __construct(\PhpParser\Node\Stmt\Do_ $node)
     {
         parent::__construct($node);
     }
 
+    protected function printEnterMessage()
+    {
+        $this->printSystemMessage(I18n::getInstance()->get('code.do-while-enter'));
+    }
+
+    protected function printExitMessage()
+    {
+        $this->printSystemMessage(I18n::getInstance()->get('code.do-while-exit'), $this->node->getAttribute('endLine'));
+    }
+
+    protected function printLoopCond()
+    {
+        $this->printMessage(
+                I18n::getInstance()->get('code.loop-cond') . ' ' .
+                $this->condition->message(), $this->node->getAttribute('endLine')
+        );
+    }
+
     protected function resolve()
     {
-        $binOp = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
-        $this->printMessage(
-                Stylizer::systemMessage(
-                        I18n::getInstance()->get('code.do-while-enter')
-                )
-        );
+        $scriptCrawler = \PhpTestBed\ScriptCrawler::getInstance();
         \PhpTestBed\ScriptCrawler::getInstance()->addLevel();
         if (!empty($this->node->stmts)) {
             do {
-                \PhpTestBed\ScriptCrawler::getInstance()->crawl($this->node->stmts);
-                $binOp = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
-                $this->printMessage(
-                        I18n::getInstance()->get('code.loop-cond') . ' ' .
-                        $binOp->message(), $this->node->getAttribute('endLine')
-                );
-            } while ($binOp->getResult());
+                $scriptCrawler->crawl($this->node->stmts);
+                if ($scriptCrawler->getBreak()) {
+                    break;
+                }
+                $this->condition = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
+                $this->printLoopCond();
+            } while ($this->condition->getResult());
         }
-        \PhpTestBed\ScriptCrawler::getInstance()->removeLevel();
-        $this->printMessage(
-                Stylizer::systemMessage(
-                        I18n::getInstance()->get('code.do-while-exit')
-                )
-                , $this->node->getAttribute('endLine')
-        );
+        $scriptCrawler->removeLevel();
+        $scriptCrawler->removeBreak();
     }
 
 }

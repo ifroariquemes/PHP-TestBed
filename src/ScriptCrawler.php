@@ -58,6 +58,9 @@ class ScriptCrawler
     public function crawl(array $nodes)
     {
         foreach ($nodes as $node) {
+            if ($this->getBreak()) {
+                break;
+            }
             $nodeClass = str_replace('PhpParser\\', 'PhpTestBed\\', get_class($node));
             if (!class_exists($nodeClass)) {
                 $this->printMessage(
@@ -118,16 +121,19 @@ class ScriptCrawler
         }
         $this->level--;
     }
-    
-    public function callBreak() {
+
+    public function callBreak()
+    {
         $this->break = true;
     }
-    
-    public function getBreak() {
+
+    public function getBreak()
+    {
         return $this->break;
     }
-    
-    public function removeBreak() {
+
+    public function removeBreak()
+    {
         $this->break = false;
     }
 

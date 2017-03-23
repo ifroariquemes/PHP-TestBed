@@ -28,30 +28,31 @@ class For_ extends \PhpTestBed\ResolverAbstract
         return true;
     }
 
+    protected function printEnterMessage()
+    {
+        $this->printSystemMessage(I18n::getInstance()->get('code.for-enter'));
+    }
+
+    protected function printExitMessage()
+    {
+        $this->printSystemMessage(I18n::getInstance()->get('code.for-exit'), $this->node->getAttribute('endLine'));
+    }
+
     protected function resolve()
     {
-        $this->printMessage(
-                Stylizer::systemMessage(
-                        I18n::getInstance()->get('code.for-enter')
-                )
-        );
-        \PhpTestBed\ScriptCrawler::getInstance()->addLevel();
-        \PhpTestBed\ScriptCrawler::getInstance()->crawl($this->node->init);
-        while ($this->testConditions()) {
+        $scriptCrawler = \PhpTestBed\ScriptCrawler::getInstance();
+        $scriptCrawler->addLevel();
+        $scriptCrawler->crawl($this->node->init);
+        while (!$scriptCrawler->getBreak() && $this->testConditions()) {
             if (!empty($this->node->stmts)) {
-                \PhpTestBed\ScriptCrawler::getInstance()->crawl($this->node->stmts);
+                $scriptCrawler->crawl($this->node->stmts);
             }
             if (!empty($this->node->loop)) {
-                \PhpTestBed\ScriptCrawler::getInstance()->crawl($this->node->loop);
+                $scriptCrawler->crawl($this->node->loop);
             }
         }
-        \PhpTestBed\ScriptCrawler::getInstance()->removeLevel();
-        $this->printMessage(
-                Stylizer::systemMessage(
-                        I18n::getInstance()->get('code.for-exit')
-                )
-                , $this->node->getAttribute('endLine')
-        );
+        $scriptCrawler->removeLevel();
+        $scriptCrawler->removeBreak();
     }
 
 }

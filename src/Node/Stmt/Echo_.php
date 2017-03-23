@@ -25,7 +25,7 @@ class Echo_ extends \PhpTestBed\ResolverAbstract
     {
         $eVar = [
             'value' => Stylizer::value($value),
-            'expr' => Stylizer::expression($expr),
+            'expr' => Stylizer::expression("($expr)"),
             'where' => \PhpTestBed\Repository::showUsed([], $usedVars)
         ];
         $mVar = [
@@ -40,12 +40,18 @@ class Echo_ extends \PhpTestBed\ResolverAbstract
         $eVar = [
             'value' => Stylizer::value($value),
             'expr' => Stylizer::expression("($varName)"),
-            'where' => \PhpTestBed\Repository::showUsed([], [$var => $value])
+            'where' => \PhpTestBed\Repository::showUsed([], [$var => $value], [])
         ];
         $mVar = [
             'value' => I18n::getInstance()->get('code.binary-op-var', $eVar)
         ];
         $this->printMessage(I18n::getInstance()->get('code.echo-scalar', $mVar));
+    }
+
+    private function printEcho(\PhpParser\Node\Expr\BinaryOp $expr)
+    {
+        $line = new \PhpTestBed\Node\Expr\BinaryOp($expr);
+        $this->printMessage(sprintf('%s %s', I18n::getInstance()->get('code.echo'), $line->message()));
     }
 
     protected function resolve()
@@ -64,25 +70,24 @@ class Echo_ extends \PhpTestBed\ResolverAbstract
                 $this->printVariable($expr->name, $value);
             } elseif ($expr instanceof \PhpParser\Node\Expr\PostInc) {
                 $pValue = \PhpTestBed\Repository::getInstance()->get($expr->var->name);
-                $varName = Stylizer::variable("\${$expr->var->name}");
+                $varName = Stylizer::variable($expr->var->name);
                 $this->printOperation($pValue, "($varName)", [$expr->var->name => $pValue]);
                 new \PhpTestBed\Node\Expr\PostInc($expr);
             } elseif ($expr instanceof \PhpParser\Node\Expr\PreInc) {
                 $pInc = new \PhpTestBed\Node\Expr\PreInc($expr);
-                $varName = Stylizer::variable("\${$expr->var->name}");
-                $this->printOperation($pInc->getValue(), "($varName)", [$expr->var->name => $pInc->getValue()]);
+                $varName = Stylizer::variable($expr->var->name);
+                $this->printOperation($pInc->getValue(), $varName, [$expr->var->name => $pInc->getValue()]);
             } elseif ($expr instanceof \PhpParser\Node\Expr\PostDec) {
                 $pValue = \PhpTestBed\Repository::getInstance()->get($expr->var->name);
-                $varName = Stylizer::variable("\${$expr->var->name}");
-                $this->printOperation($pValue, "($varName)", [$expr->var->name => $pValue]);
+                $varName = Stylizer::variable($expr->var->name);
+                $this->printOperation($pValue, $varName, [$expr->var->name => $pValue]);
                 new \PhpTestBed\Node\Expr\PostDec($expr);
             } elseif ($expr instanceof \PhpParser\Node\Expr\PreDec) {
                 $pDec = new \PhpTestBed\Node\Expr\PreDec($expr);
-                $varName = Stylizer::variable("\${$expr->var->name}");
-                $this->printOperation($pDec->getValue(), "($varName)", [$expr->var->name => $pDec->getValue()]);
+                $varName = Stylizer::variable($expr->var->name);
+                $this->printOperation($pDec->getValue(), $varName, [$expr->var->name => $pDec->getValue()]);
             } else {
-                $line = new \PhpTestBed\Node\Expr\BinaryOp($expr);
-                $this->printMessage(sprintf('%s %s', I18n::getInstance()->get('code.echo'), $line->message()));
+                $this->printEcho($expr);
             }
         }
     }

@@ -32,7 +32,8 @@ class Stylizer
     public static function variable($message)
     {
         $code = '<span class="testbed-variable">%s</span>';
-        return sprintf($code, $message);
+        $var = strpos($message, '$') === 0 ? $message : "$$message";
+        return sprintf($code, $var);
     }
 
     public static function value($message)
