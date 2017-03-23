@@ -22,6 +22,15 @@ code:
     loop-cond: A condição do laço retorna    
     post-inc: A variável :var tem seu valor incrementado para :value
     post-dec: A variável :var tem seu valor decrementado para :value
+    switch-cond: Começa a testar no switch
+    switch-case-success: Entra no caso com valor :value pois este é o valor de :cond
+    switch-case-fail: Rejeita o caso com valor :value pois este não é o valor de :cond
+    switch-case-default: Entra no caso padrão
+    switch-enter: --- Entrou na condicional SWITCH ---
+    switch-exit: --- Saiu da condicional SWITCH ---
+    switch-case-enter: --- Entrou em um caso SWITCH ---
+    switch-case-exit: --- Saiu do caso SWITCH ---
+    break: Realizada solicitação de parada na execução do bloco atual
 exceptions:
     script-not-found: Script :script não foi encontrado
     node-not-implemented: A resolução de :node ainda não foi implementada

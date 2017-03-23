@@ -15,7 +15,14 @@ class If_ extends \PhpTestBed\ResolverAbstract
 
     protected function resolve()
     {
-        $binOp = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
+        switch (get_class($this->node->cond)) {
+            case \PhpParser\Node\Expr\Variable::class:
+                $binOp = new \PhpTestBed\Node\Expr\Variable($this->node->cond);
+                break;
+            default:
+                $binOp = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
+                break;
+        }
         $this->printMessage(
                 Stylizer::systemMessage(
                         I18n::getInstance()->get('code.if-enter')
