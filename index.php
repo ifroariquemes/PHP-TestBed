@@ -8,6 +8,9 @@
         <link rel="stylesheet" type="text/css" href="app/css/style.css">
     </head>
     <body>
-        <?php PhpTestBed\ScriptCrawler::getInstance('test.php')->run(); ?>
+        <?php 
+        PhpTestBed\I18n::setLocale('en');
+        PhpTestBed\ScriptCrawler::getInstance('test.php')->run(); 
+        ?>
     </body>
 </html>

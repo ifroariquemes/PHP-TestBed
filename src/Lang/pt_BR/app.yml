@@ -6,7 +6,6 @@ code:
     assign-op: A variável :var recebe :value
     array: o conjunto de valores :value
     const: A constante :const recebe o valor :value
-    array: o conjunto de valores :value
     binary-op: o valor :value resultante da operação :expr
     binary-op-var: o valor :value resultante da operação :expr onde :where
     do-while-enter: --- Entrou no laço DO-WHILE ---
@@ -16,7 +15,7 @@ code:
     if-enter: --- Entrou na condicional IF ---
     if-exit: --- Saiu da condicional IF ---
     if-cond: A condição da estrutura retorna
-    else-cond: Nenhuma condição satisfeita executa o bloco else
+    else-cond: Nenhuma condição satisfeita, executa o bloco else
     for-enter: --- Entrou no laço FOR ---
     for-exit: --- Saiu do laço FOR ---
     loop-cond: A condição do laço retorna    

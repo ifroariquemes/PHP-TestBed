@@ -1,10 +1,44 @@
 code:
     line: Line :line
-    assign: The variable $:var receives the value :value
+    echo: Prints
+    echo-scalar: Prints :value
+    assign: The variable :var receives the value :value
+    assign-op: The variable :var receives :value
+    array: the set of values :value
+    const: The constant :const receives the value :value
+    binary-op: the value :value resultant of the operation :expr
+    binary-op-var: the value :value resultant of the operation :expr where :where
+    do-while-enter: --- Start the loop DO-WHILE ---
+    do-while-exit: --- Exit the loop DO-WHILE ---
+    while-enter: --- Start the loop WHILE ---
+    while-exit: --- Exit the loop WHILE ---
+    if-enter: --- Start the conditional IF ---
+    if-exit: --- Exit the conditional IF ---
+    if-cond: The condition returns
+    else-cond: No conditions satifies, execute the else block
+    for-enter: --- Start the loop FOR ---
+    for-exit: --- Exit the loop FOR ---
+    loop-cond: The loop condition returns
+    post-inc: The variable :var has its value incremented to :value
+    post-dec: The variable :var has its value decremented to :value
+    switch-cond: Starts to test switch
+    switch-case-success: Enter the case with value :value because this is the value of :cond
+    switch-case-fail: Rejects the case with value :value because this is not the value of :cond
+    switch-case-default: Enters the default case
+    switch-enter: --- Enter the conditional SWITCH ---
+    switch-exit: --- Exit the conditional SWITCH ---
+    switch-case-enter: --- Enter the switch CASE ---
+    switch-case-exit: --- Exit the switch CASE ---
+    break: Performs request to stop actual block execution
 exceptions:
-    script-not-found: Script :script was not found
+    script-not-found: Script :script not found
+    node-not-implemented: Resolution of :node not implemented yet
 messages:
     start: Script started
-    end: Script ended
+    end: Script finished
+legend:
+    array-key-position: Key/Position
+    array-value: Value
+    array-empty: empty
 config:
-    timestamp: Y-m-d H:i:s.u
+    timestamp: m/d/Y H:i:s.u
