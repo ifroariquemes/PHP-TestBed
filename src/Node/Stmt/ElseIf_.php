@@ -4,7 +4,7 @@ namespace PhpTestBed\Node\Stmt;
 
 use PhpTestBed\I18n;
 
-class ElseIf_ extends \PhpTestBed\ResolverAbstract
+class ElseIf_ extends \PhpTestBed\Node\ResolverAbstract
 {
 
     private $condition;
@@ -25,7 +25,7 @@ class ElseIf_ extends \PhpTestBed\ResolverAbstract
     protected function resolve()
     {
         $scriptCrawler = \PhpTestBed\ScriptCrawler::getInstance();
-        $this->condition = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
+        $this->condition = \PhpTestBed\Node\ResolverCondition::choose($this->node->cond);
         $this->printIfCond();
         if ($this->condition->getResult()) {
             $scriptCrawler->crawl($this->node->stmts);

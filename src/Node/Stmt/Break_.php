@@ -5,7 +5,7 @@ namespace PhpTestBed\Node\Stmt;
 use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
 
-class Break_ extends \PhpTestBed\ResolverAbstract
+class Break_ extends \PhpTestBed\Node\ResolverAbstract
 {
 
     public function __construct(\PhpParser\Node\Stmt\Break_ $node)

@@ -19,6 +19,8 @@ code:
     else-cond: No conditions satifies, execute the else block
     for-enter: --- Start the loop FOR ---
     for-exit: --- Exit the loop FOR ---
+    foreach-enter: --- Start the loop FOREACH ---
+    foreach-exit: --- Exit the loop FOREACH ---
     loop-cond: The loop condition returns
     post-inc: The variable :var has its value incremented to :value
     post-dec: The variable :var has its value decremented to :value

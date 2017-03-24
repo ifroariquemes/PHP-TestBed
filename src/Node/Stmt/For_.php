@@ -3,9 +3,8 @@
 namespace PhpTestBed\Node\Stmt;
 
 use PhpTestBed\I18n;
-use PhpTestBed\Stylizer;
 
-class For_ extends \PhpTestBed\ResolverAbstract
+class For_ extends \PhpTestBed\Node\ResolverAbstract
 {
 
     public function __construct(\PhpParser\Node\Stmt\For_ $node)
@@ -16,7 +15,7 @@ class For_ extends \PhpTestBed\ResolverAbstract
     private function testConditions()
     {
         foreach ($this->node->cond as $cond) {
-            $binOp = new \PhpTestBed\Node\Expr\BinaryOp($cond);
+            $binOp = \PhpTestBed\Node\ResolverCondition::choose($cond);
             $this->printMessage(
                     I18n::getInstance()->get('code.if-cond') . ' ' .
                     $binOp->message()

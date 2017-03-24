@@ -5,7 +5,7 @@ namespace PhpTestBed\Node\Stmt;
 use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
 
-class If_ extends \PhpTestBed\ResolverAbstract
+class If_ extends \PhpTestBed\Node\ResolverAbstract
 {
 
     private $condition;
@@ -48,14 +48,7 @@ class If_ extends \PhpTestBed\ResolverAbstract
     protected function resolve()
     {
         $scriptCrawler = \PhpTestBed\ScriptCrawler::getInstance();
-        switch (get_class($this->node->cond)) {
-            case \PhpParser\Node\Expr\Variable::class:
-                $this->condition = new \PhpTestBed\Node\Expr\Variable($this->node->cond);
-                break;
-            default:
-                $this->condition = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
-                break;
-        }
+        $this->condition = \PhpTestBed\Node\ResolverCondition::choose($this->node->cond);
         $scriptCrawler->addLevel();
         $this->printIfCond();
         $this->resolveIf();

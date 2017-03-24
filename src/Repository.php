@@ -48,7 +48,7 @@ class Repository
         $used = '';
         foreach ($consts as $const => $value) {
             $used .= sprintf('%s %s %s, '
-                    , Stylizer::variable($const)
+                    , Stylizer::constant($const)
                     , Stylizer::operation('=')
                     , Stylizer::type($value));
         }
@@ -60,9 +60,16 @@ class Repository
         }
         if (!is_null($arrays)) {
             foreach ($arrays as $arr) {
-                $key = Stylizer::type($arr['key']);
+                if (is_array($arr['key'])) {
+                    $key = '';
+                    foreach ($arr['key'] as $arrKey) {
+                        $key .= sprintf('[%s]', Stylizer::type($arrKey));
+                    }
+                } else {
+                    $key = sprintf('[%s]', Stylizer::type($arr['key']));
+                }
                 $used .= sprintf('%s %s %s, '
-                        , Stylizer::variable("\${$arr['var']}") . "[$key]"
+                        , Stylizer::variable("\${$arr['var']}") . $key
                         , Stylizer::operation('=')
                         , Stylizer::type($arr['value']));
             }

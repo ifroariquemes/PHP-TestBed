@@ -5,7 +5,7 @@ namespace PhpTestBed\Node\Expr;
 use PhpTestBed\Stylizer;
 use PhpTestBed\I18n;
 
-class Variable extends \PhpTestBed\ResolverAbstract
+class Variable extends \PhpTestBed\Node\ResolverAbstract
 {
 
     private $value;

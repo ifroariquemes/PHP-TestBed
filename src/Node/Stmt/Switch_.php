@@ -5,7 +5,7 @@ namespace PhpTestBed\Node\Stmt;
 use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
 
-class Switch_ extends \PhpTestBed\ResolverAbstract
+class Switch_ extends \PhpTestBed\Node\ResolverAbstract
 {
 
     private $currentCase;
@@ -17,16 +17,7 @@ class Switch_ extends \PhpTestBed\ResolverAbstract
     {
         $this->currentCaseIndex = 0;
         $this->totalCases = count($node->cases);
-        switch (get_class($node->cond)) {
-            case \PhpParser\Node\Expr\Variable::class:
-                $this->condition = new
-                        \PhpTestBed\Node\Expr\Variable($node->cond);
-                break;
-            default:
-                $this->condition = new
-                        \PhpTestBed\Node\Expr\BinaryOp($node->cond);
-                break;
-        }
+        $this->condition = \PhpTestBed\Node\ResolverCondition::choose($node->cond);
         parent::__construct($node);
     }
 
@@ -135,7 +126,7 @@ class Switch_ extends \PhpTestBed\ResolverAbstract
                 if ($this->currentCase->cond instanceof \PhpParser\Node\Scalar) {
                     $caseValue = $this->currentCase->cond->value;
                 } else {
-                    $binOp = new \PhpTestBed\Node\Expr\BinaryOp($this->currentCase->cond);
+                    $binOp = \PhpTestBed\Node\ResolverCondition::choose($this->currentCase->cond);
                     $caseValue = $binOp->getResult();
                 }
                 if ($this->condition->getResult() == $caseValue) {

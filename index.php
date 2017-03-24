@@ -9,7 +9,7 @@
     </head>
     <body>
         <?php 
-        PhpTestBed\I18n::setLocale('en');
+        PhpTestBed\I18n::setLocale('pt_BR');
         PhpTestBed\ScriptCrawler::getInstance('test.php')->run(); 
         ?>
     </body>

@@ -4,7 +4,7 @@ namespace PhpTestBed\Node\Stmt;
 
 use PhpTestBed\I18n;
 
-class While_ extends \PhpTestBed\ResolverAbstract
+class While_ extends \PhpTestBed\Node\ResolverAbstract
 {
 
     private $condition;
@@ -36,8 +36,8 @@ class While_ extends \PhpTestBed\ResolverAbstract
     {
         $scriptCrawler = \PhpTestBed\ScriptCrawler::getInstance();
         $scriptCrawler->addLevel();
-        if (!empty($this->node->stmts)) {
-            $this->condition = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
+        
+            $this->condition = \PhpTestBed\Node\ResolverCondition::choose($this->node->cond);
             $this->printLoopCond();
             while ($this->condition->getResult()) {
                 $scriptCrawler->crawl($this->node->stmts);
@@ -47,7 +47,7 @@ class While_ extends \PhpTestBed\ResolverAbstract
                 $this->condition = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);
                 $this->printLoopCond();
             }
-        }
+        
         $scriptCrawler->removeLevel();
         $scriptCrawler->removeBreak();
     }

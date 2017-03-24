@@ -5,7 +5,7 @@ namespace PhpTestBed\Node\Stmt;
 use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
 
-class Const_ extends \PhpTestBed\ResolverAbstract
+class Const_ extends \PhpTestBed\Node\ResolverAbstract
 {
 
     public function __construct(\PhpParser\Node\Stmt\Const_ $node)
@@ -16,7 +16,7 @@ class Const_ extends \PhpTestBed\ResolverAbstract
     private function printConst($name, $value)
     {
         $mVar = [
-            'const' => Stylizer::variable($name),
+            'const' => Stylizer::constant($name),
             'value' => Stylizer::value($value)
         ];
         $this->printMessage(I18n::getInstance()->get('code.const', $mVar));

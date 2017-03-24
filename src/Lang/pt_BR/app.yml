@@ -19,6 +19,8 @@ code:
     else-cond: Nenhuma condição satisfeita, executa o bloco else
     for-enter: --- Entrou no laço FOR ---
     for-exit: --- Saiu do laço FOR ---
+    foreach-enter: --- Entrou no laço FOREACH ---
+    foreach-exit: --- Saiu do laço FOREACH ---
     loop-cond: A condição do laço retorna    
     post-inc: A variável :var tem seu valor incrementado para :value
     post-dec: A variável :var tem seu valor decrementado para :value
@@ -31,6 +33,8 @@ code:
     switch-case-enter: --- Entrou em um caso SWITCH ---
     switch-case-exit: --- Saiu do caso SWITCH ---
     break: Realizada solicitação de parada na execução do bloco atual
+    foreach-next-key: A variável :var recebe o próximo índice do conjunto :origin, com valor :value
+    foreach-next-item: A variável :var recebe o próximo item do conjunto :origin, com valor :value
 exceptions:
     script-not-found: Script :script não foi encontrado
     node-not-implemented: A resolução de :node ainda não foi implementada
