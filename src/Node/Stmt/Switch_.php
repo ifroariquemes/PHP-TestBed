@@ -21,6 +21,16 @@ class Switch_ extends \PhpTestBed\Node\ResolverAbstract
         parent::__construct($node);
     }
 
+    protected function printEnterMessage()
+    {
+        parent::__printEnterMessage('code.switch-enter');
+    }
+
+    private function printExitMessage()
+    {
+        parent::__printExitMessage('code.switch-exit');
+    }
+
     private function loadCurrentCase()
     {
         if ($this->currentCaseIndex >= $this->totalCases) {
@@ -28,24 +38,6 @@ class Switch_ extends \PhpTestBed\Node\ResolverAbstract
         }
         $this->currentCase = $this->node->cases[$this->currentCaseIndex];
         return true;
-    }
-
-    private function printSwitchEnterMessage()
-    {
-        $this->printMessage(
-                Stylizer::systemMessage(
-                        I18n::getInstance()->get('code.switch-enter')
-                )
-        );
-    }
-
-    private function printSwitchExitMessage()
-    {
-        $this->printMessage(
-                Stylizer::systemMessage(
-                        I18n::getInstance()->get('code.switch-exit')
-                ), $this->node->getAttribute('endLine')
-        );
     }
 
     private function printSwithCondMessage()
@@ -100,7 +92,6 @@ class Switch_ extends \PhpTestBed\Node\ResolverAbstract
 
     protected function resolve()
     {
-        $this->printSwitchEnterMessage();
         \PhpTestBed\ScriptCrawler::getInstance()->addLevel();
         $this->printSwithCondMessage();
         while ($this->loadCurrentCase()) {
@@ -112,7 +103,6 @@ class Switch_ extends \PhpTestBed\Node\ResolverAbstract
         }
         \PhpTestBed\ScriptCrawler::getInstance()->removeBreak();
         \PhpTestBed\ScriptCrawler::getInstance()->removeLevel();
-        $this->printSwitchExitMessage();
     }
 
     private function crawlSwitch()

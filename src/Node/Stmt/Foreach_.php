@@ -16,12 +16,12 @@ class Foreach_ extends \PhpTestBed\Node\ResolverAbstract
 
     protected function printEnterMessage()
     {
-        $this->printSystemMessage(I18n::getInstance()->get('code.foreach-enter'));
+        parent::__printEnterMessage('code.foreach-enter');
     }
 
     protected function printExitMessage()
     {
-        $this->printSystemMessage(I18n::getInstance()->get('code.foreach-exit'), $this->node->getAttribute('endLine'));
+        parent::__printExitMessage('code.foreach-exit');
     }
 
     private function printNextItem($value)
@@ -53,7 +53,7 @@ class Foreach_ extends \PhpTestBed\Node\ResolverAbstract
         $scriptCrawler->addLevel();
         $expr = \PhpTestBed\Repository::getInstance()->get($this->node->expr->name);
         foreach ($expr as $key => $value) {
-            if ($scriptCrawler->getBreak()) {
+            if ($scriptCrawler->getBreak() || $scriptCrawler->getThrow()) {
                 break;
             }
             if (!is_null($this->node->keyVar)) {

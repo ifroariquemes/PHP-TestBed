@@ -16,12 +16,12 @@ class While_ extends \PhpTestBed\Node\ResolverAbstract
 
     protected function printEnterMessage()
     {
-        $this->printSystemMessage(I18n::getInstance()->get('code.while-enter'));
+        parent::__printEnterMessage('code.while-enter');
     }
 
     protected function printExitMessage()
     {
-        $this->printSystemMessage(I18n::getInstance()->get('code.while-exit'), $this->node->getAttribute('endLine'));
+        parent::__printExitMessage('code.while-exit');
     }
 
     private function printLoopCond()
@@ -41,7 +41,7 @@ class While_ extends \PhpTestBed\Node\ResolverAbstract
             $this->printLoopCond();
             while ($this->condition->getResult()) {
                 $scriptCrawler->crawl($this->node->stmts);
-                if($scriptCrawler->getBreak()) {
+                if($scriptCrawler->getBreak() || $scriptCrawler->getThrow()) {
                     break;
                 }
                 $this->condition = new \PhpTestBed\Node\Expr\BinaryOp($this->node->cond);

@@ -3,7 +3,6 @@
 namespace PhpTestBed\Node\Stmt;
 
 use PhpTestBed\I18n;
-use PhpTestBed\Stylizer;
 
 class Break_ extends \PhpTestBed\Node\ResolverAbstract
 {

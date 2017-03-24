@@ -2,6 +2,8 @@
 
 namespace PhpTestBed\Node;
 
+use PhpTestBed\I18n;
+
 abstract class ResolverAbstract
 {
 
@@ -37,7 +39,7 @@ abstract class ResolverAbstract
     final private function getLine($overrideWithLine = 0)
     {
         if ($this->node instanceof \PhpParser\NodeAbstract) {
-            return \PhpTestBed\I18n::getInstance()->get('code.line'
+            return I18n::getInstance()->get('code.line'
                             , ['line' => (!$overrideWithLine) ? $this->node->getLine() : $overrideWithLine]) . ': ';
         }
     }
@@ -57,6 +59,21 @@ abstract class ResolverAbstract
         $this->printMessage(
                 \PhpTestBed\Stylizer::systemMessage($message), $overrideWithLine
         );
+    }
+
+    protected function __printEnterMessage($i18nCode, $overrideWithLine = 0)
+    {
+        $this->printSystemMessage(I18n::getInstance()->get($i18nCode), $overrideWithLine);
+    }
+
+    protected function __printExitMessage($i18nCode, $overrideWithLine = 0)
+    {
+        if (!\PhpTestBed\ScriptCrawler::getInstance()->getThrow()) {
+            $this->printSystemMessage(
+                    I18n::getInstance()->get($i18nCode)
+                    , ($overrideWithLine) ? $overrideWithLine : $this->node->getAttribute('endLine')
+            );
+        }
     }
 
     protected function printEnterMessage()

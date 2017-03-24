@@ -19,12 +19,12 @@ class If_ extends \PhpTestBed\Node\ResolverAbstract
 
     protected function printEnterMessage()
     {
-        $this->printSystemMessage(I18n::getInstance()->get('code.if-enter'));
+        parent::__printEnterMessage('code.if-enter');
     }
 
     protected function printExitMessage()
     {
-        $this->printSystemMessage(I18n::getInstance()->get('code.if-exit'), $this->node->getAttribute('endLine'));
+        parent::__printExitMessage('code.if-exit');
     }
 
     private function printIfCond()

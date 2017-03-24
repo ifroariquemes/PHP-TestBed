@@ -16,12 +16,12 @@ class Do_ extends \PhpTestBed\Node\ResolverAbstract
 
     protected function printEnterMessage()
     {
-        $this->printSystemMessage(I18n::getInstance()->get('code.do-while-enter'));
+        parent::__printEnterMessage('code.do-while-enter');
     }
 
     protected function printExitMessage()
     {
-        $this->printSystemMessage(I18n::getInstance()->get('code.do-while-exit'), $this->node->getAttribute('endLine'));
+        parent::__printExitMessage('code.do-while-exit');
     }
 
     protected function printLoopCond()
@@ -39,7 +39,7 @@ class Do_ extends \PhpTestBed\Node\ResolverAbstract
         if (!empty($this->node->stmts)) {
             do {
                 $scriptCrawler->crawl($this->node->stmts);
-                if ($scriptCrawler->getBreak()) {
+                if ($scriptCrawler->getBreak() || $scriptCrawler->getThrow()) {
                     break;
                 }
                 $this->condition = \PhpTestBed\Node\ResolverCondition::choose($this->node->cond);

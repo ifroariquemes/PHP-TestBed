@@ -29,12 +29,12 @@ class For_ extends \PhpTestBed\Node\ResolverAbstract
 
     protected function printEnterMessage()
     {
-        $this->printSystemMessage(I18n::getInstance()->get('code.for-enter'));
+        parent::__printEnterMessage('code.for-enter');
     }
 
     protected function printExitMessage()
     {
-        $this->printSystemMessage(I18n::getInstance()->get('code.for-exit'), $this->node->getAttribute('endLine'));
+        parent::__printExitMessage('code.for-exit');
     }
 
     protected function resolve()
@@ -42,7 +42,7 @@ class For_ extends \PhpTestBed\Node\ResolverAbstract
         $scriptCrawler = \PhpTestBed\ScriptCrawler::getInstance();
         $scriptCrawler->addLevel();
         $scriptCrawler->crawl($this->node->init);
-        while (!$scriptCrawler->getBreak() && $this->testConditions()) {
+        while (!$scriptCrawler->getBreak() && !$scriptCrawler->getThrow() && $this->testConditions()) {
             if (!empty($this->node->stmts)) {
                 $scriptCrawler->crawl($this->node->stmts);
             }

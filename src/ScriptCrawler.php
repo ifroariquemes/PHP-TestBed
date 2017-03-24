@@ -18,6 +18,8 @@ class ScriptCrawler
     private $returnMessages;
     private $messages;
     private $break;
+    private $try;
+    private $throw;
 
     public function __construct($options)
     {
@@ -30,9 +32,11 @@ class ScriptCrawler
         $this->script = file_get_contents($this->path);
         $this->level = 0;
         $this->messages = array();
+        $this->try = array();
         $this->useTimestamp = (is_array($options)) ? $options['timestamp'] ?? true : true;
         $this->returnMessages = (is_array($options)) ? $options['return'] ?? false : false;
         $this->break = false;
+        $this->throw = false;
         $this->parseScript();
     }
 
@@ -43,22 +47,22 @@ class ScriptCrawler
         $this->nodes = $this->parser->parse($this->script);
     }
 
-    public function run()
+    private function printEnterMessage()
     {
         $this->printMessage(I18n::getInstance()->get('messages.start'));
-        $this->crawl($this->nodes);
-        $this->printMessage(I18n::getInstance()->get('messages.end'));
-        var_dump(Repository::getInstance()->getVariables());
-        var_dump($this->nodes);
-        if ($this->returnMessages) {
-            return $this->messages;
-        }
     }
 
-    public function crawl(array $nodes)
+    public function run()
+    {
+        $this->printEnterMessage();
+        $this->crawl($this->nodes);
+        $this->callExit();
+    }
+
+    public function crawl(array $nodes, $byPassThrow = false)
     {
         foreach ($nodes as $node) {
-            if ($this->getBreak()) {
+            if ($this->getBreak() || (!$byPassThrow && $this->getThrow())) {
                 break;
             }
             $nodeClass = str_replace('PhpParser\\', 'PhpTestBed\\', get_class($node));
@@ -109,17 +113,21 @@ class ScriptCrawler
         return $this->level;
     }
 
-    public function addLevel()
+    public function addLevel($byPassThrow = false)
     {
-        $this->level++;
+        if ($byPassThrow || !$this->getThrow()) {
+            $this->level++;
+        }
     }
 
-    public function removeLevel()
+    public function removeLevel($byPassThrow = false)
     {
-        if ($this->level === 0) {
-            throw new Exception("Level cannot be reduced below zero.");
+        if ($byPassThrow || !$this->getThrow()) {
+            if ($this->level === 0) {
+                throw new \Exception("Level cannot be reduced below zero.");
+            }
+            $this->level--;
         }
-        $this->level--;
     }
 
     public function callBreak()
@@ -135,6 +143,52 @@ class ScriptCrawler
     public function removeBreak()
     {
         $this->break = false;
+    }
+
+    public function registerTry($try)
+    {
+        array_push($this->try, $try);
+    }
+
+    /**
+     * 
+     * @return Node\Stmt\TryCatch
+     */
+    public function unregisterTry()
+    {
+        return array_pop($this->try);
+    }
+
+    public function callThrow(\PhpParser\Node\Stmt\Throw_ $throw)
+    {
+        $this->throw = true;
+        if (!empty($this->try)) {
+            end($this->try)->resolveCatch($throw);
+            return true;
+        }
+        return false;
+    }
+
+    public function getThrow()
+    {
+        return $this->throw;
+    }
+
+    public function removeThrow()
+    {
+        $this->throw = false;
+    }
+
+    public function callExit()
+    {
+        $this->level = 0;
+        $this->printMessage(I18n::getInstance()->get('messages.end'));
+        var_dump(Repository::getInstance()->getVariables());
+        var_dump($this->nodes);
+        if ($this->returnMessages) {
+            return $this->messages;
+        }
+        exit;
     }
 
 }

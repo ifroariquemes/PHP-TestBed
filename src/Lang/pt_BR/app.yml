@@ -35,6 +35,15 @@ code:
     break: Realizada solicitação de parada na execução do bloco atual
     foreach-next-key: A variável :var recebe o próximo índice do conjunto :origin, com valor :value
     foreach-next-item: A variável :var recebe o próximo item do conjunto :origin, com valor :value
+    throw: Dispara uma exceção, interrompe a execução do programa
+    try-enter: --- Entrou no bloco TRY ---
+    try-exit: --- Saiu do bloco TRY ---
+    try-catch-enter: --- Entrou no bloco CATCH ---
+    try-catch-exit: --- Saiu do bloco CATCH ---
+    try-finally-enter: --- Entrou no bloco FINALLY ---
+    try-finally-exit: --- Saiu do bloco FINALLY ---
+    try-catch-check-ok: Avalia que a exceção disparada do tipo :throw é compatível com o tratamento para :catch
+    try-catch-check-fail: A exceção disparada do tipo :throw não é compatível com o tratamento para :catch
 exceptions:
     script-not-found: Script :script não foi encontrado
     node-not-implemented: A resolução de :node ainda não foi implementada
