@@ -2,15 +2,31 @@
 
 namespace PhpTestBed\Node\Stmt;
 
-class Nop extends \PhpTestBed\Node\ResolverAbstract
+/**
+ * Nop statement.
+ * @package PhpTestBed
+ * @copyright (c) 2017, Federal Institute of Rondonia
+ * @license http://gnu.org/licenses/lgpl.txt LGPL-3.0+
+ * @since Release 0.1.0 
+ * @author Natanael Simoes <natanael.simoes@ifro.edu.br>
+ * @link https://github.com/ifroariquemes/PHP-TestBed Github repository
+ */
+class Nop extends \PhpTestBed\Node\NodeBaseAbstract
 {
 
+    /**
+     * Initializes object with a PhpParser Nop statemtent.
+     * @param \PhpParser\Node\Stmt\Nop $node The statement
+     */
     public function __construct(\PhpParser\Node\Stmt\Nop $node)
     {
         parent::__construct($node);
     }
 
-    protected function resolve()
+    /**
+     * Resolves Nop. What is a Nop?
+     */
+    public function resolve()
     {
         
     }

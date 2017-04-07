@@ -5,19 +5,17 @@ namespace PhpTestBed\Node\Expr;
 use PhpTestBed\Stylizer;
 use PhpTestBed\I18n;
 
-class Variable extends \PhpTestBed\Node\ResolverAbstract
+class Variable extends \PhpTestBed\Node\NodeUsableAbstract
 {
-
-    private $value;
 
     public function __construct(\PhpParser\Node\Expr\Variable $node)
     {
         parent::__construct($node);
     }
 
-    protected function resolve()
+    public function resolve()
     {
-        $this->value = \PhpTestBed\Repository::getInstance()->get($this->node->name);
+        $this->result = \PhpTestBed\Repository::getInstance()->get($this->node->name);
     }
 
     public function getExpr()
@@ -25,19 +23,21 @@ class Variable extends \PhpTestBed\Node\ResolverAbstract
         return Stylizer::variable("\${$this->node->name}");
     }
 
-    public function message()
+    public function getMessage()
     {
         $mVar = [
             'expr' => Stylizer::expression($this->getExpr()),
-            'value' => Stylizer::value($this->value),
-            'where' => \PhpTestBed\Repository::showUsed([], [$this->node->name => $this->value], [])
+            'value' => !is_array($this->result) ?
+            Stylizer::value($this->result) :
+            Array_::prepareArrayToPrint($this->result),
+            'where' => \PhpTestBed\Repository::getInstance()->showUsed()
         ];
         return I18n::getInstance()->get('code.binary-op-var', $mVar);
     }
 
-    public function getResult()
+    public function addUsage()
     {
-        return $this->value;
+        \PhpTestBed\Repository::getInstance()->addUsedVariable($this->node->name, $this->result);
     }
 
 }

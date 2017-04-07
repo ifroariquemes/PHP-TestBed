@@ -4,52 +4,54 @@ namespace PhpTestBed\Node\Expr;
 
 use PhpTestBed\Stylizer;
 use PhpTestBed\I18n;
+use PhpTestBed\Node\NodeLoader;
 
-class ArrayDimFetch extends \PhpTestBed\Node\ResolverConditionAbstract
+class ArrayDimFetch extends \PhpTestBed\Node\NodeUsableAbstract
 {
 
     private $varName;
     private $value;
+    private $blockUsage;
 
-    public function __construct(\PhpParser\Node\Expr\ArrayDimFetch $node)
+    public function __construct(\PhpParser\Node\Expr\ArrayDimFetch $node, $blockUsage = false)
     {
+        $this->blockUsage = $blockUsage;
         parent::__construct($node);
     }
 
-    protected function resolve()
+    public function resolve()
     {
         if ($this->node->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            $newDim = new ArrayDimFetch($this->node->var);
+            $newDim = new ArrayDimFetch($this->node->var, true);
             $item = $newDim->getResult();
             $this->varName = $newDim->getVarName();
         } else {
             $this->varName = $this->node->var->name;
             $item = \PhpTestBed\Repository::getInstance()->get($this->varName);
         }
-        $this->value = $item[$this->node->dim->value];
+        $this->value = $item[NodeLoader::load($this->node->dim)->getResult()];
     }
 
     public function getExpr()
     {
-        if ($this->node->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            return sprintf('%s[%s]'
-                    , (new ArrayDimFetch($this->node->var))->getExpr()
-                    , Stylizer::type($this->node->dim->value)
-            );
-        }
-        return sprintf('%s[%s]'
-                , Stylizer::variable($this->varName)
-                , Stylizer::type($this->node->dim->value)
+        return sprintf('%s%s%s%s'
+                , ($this->node->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) ?
+                (new ArrayDimFetch($this->node->var, true))->getExpr() :
+                Stylizer::variable($this->varName)
+                , Stylizer::operation('[')
+                , NodeLoader::load($this->node->dim)->getExpr()
+                , Stylizer::operation(']')
         );
     }
 
-    public function message()
+    public function getMessage()
     {
         $mVar = [
-            'expr' => Stylizer::expression("({$this->getExpr()})"),
-            'value' => Stylizer::value($this->value)
+            'expr' => Stylizer::expression($this->getExpr()),
+            'value' => Stylizer::value($this->value),
+            'where' => \PhpTestBed\Repository::getInstance()->showUsed()
         ];
-        return I18n::getInstance()->get('code.binary-op', $mVar);
+        return I18n::getInstance()->get('code.binary-op-var', $mVar);
     }
 
     public function getResult()
@@ -67,10 +69,18 @@ class ArrayDimFetch extends \PhpTestBed\Node\ResolverConditionAbstract
         $keys = array();
         $item = $this->node;
         while ($item instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            array_push($keys, $item->dim->value);
+            array_push($keys, NodeLoader::load($item->dim)->getResult());
             $item = $item->var;
         }
         return array_reverse($keys);
+    }
+
+    public function addUsage()
+    {
+        if (!$this->blockUsage) {
+            \PhpTestBed\Repository::getInstance()
+                    ->addUsedArray($this->getVarName(), $this->getKeys(), $this->getResult());
+        }
     }
 
 }

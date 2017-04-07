@@ -4,6 +4,7 @@ code:
     echo-scalar: Prints :value
     assign: The variable :var receives the value :value
     assign-op: The variable :var receives :value
+    scalar: the value :value
     array: the set of values :value
     array-op: the set of values :value resultant of the operation :expr
     const: The constant :const receives the value :value
@@ -44,6 +45,7 @@ code:
     try-finally-exit: --- Exit block FINALLY ---
     try-catch-check-ok: The exception thrown :throw is compatible with the treatment for :catch
     try-catch-check-fail: The exception thrown :throw is NOT compatible with the treatment for :catch
+    global: Initialize the global variable :var
 exceptions:
     script-not-found: Script :script not found
     node-not-implemented: Resolution of :node not implemented yet

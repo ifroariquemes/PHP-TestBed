@@ -4,40 +4,70 @@ namespace PhpTestBed\Node\Stmt;
 
 use PhpTestBed\I18n;
 
-class For_ extends \PhpTestBed\Node\ResolverAbstract
+/**
+ * For statement.
+ * @package PhpTestBed
+ * @copyright (c) 2017, Federal Institute of Rondonia
+ * @license http://gnu.org/licenses/lgpl.txt LGPL-3.0+
+ * @since Release 0.1.0 
+ * @author Natanael Simoes <natanael.simoes@ifro.edu.br>
+ * @link https://github.com/ifroariquemes/PHP-TestBed Github repository
+ */
+class For_ extends \PhpTestBed\Node\NodeBaseAbstract
 {
 
+    /**
+     * Initializes object with a PhpParser For_ statemtent.
+     * @param \PhpParser\Node\Stmt\For_ $node The statement
+     */
     public function __construct(\PhpParser\Node\Stmt\For_ $node)
     {
         parent::__construct($node);
     }
 
-    private function testConditions()
+    /**
+     * Return the result of testing all iteration conditions.
+     * @return boolean
+     */
+    private function testConditions(): bool
     {
         foreach ($this->node->cond as $cond) {
-            $binOp = \PhpTestBed\Node\ResolverCondition::choose($cond);
+            $binOp = \PhpTestBed\Node\NodeLoader::load($cond);
             $this->printMessage(
                     I18n::getInstance()->get('code.if-cond') . ' ' .
-                    $binOp->message()
+                    $binOp->getMessage()
             );
             if ($binOp->getResult() === false) {
+                unset($binOp);
                 return false;
             }
         }
+        unset($binOp);
         return true;
     }
 
+    /**
+     * Prints the starter message.
+     */
     protected function printEnterMessage()
     {
         parent::__printEnterMessage('code.for-enter');
     }
 
+    /**
+     * Prints the exit message.
+     */
     protected function printExitMessage()
     {
         parent::__printExitMessage('code.for-exit');
     }
 
-    protected function resolve()
+    /**
+     * Resolves the for statement crawling its initial statements, then
+     * while conditions are good, crawls its internal statements and its
+     * loop statements.
+     */
+    public function resolve()
     {
         $scriptCrawler = \PhpTestBed\ScriptCrawler::getInstance();
         $scriptCrawler->addLevel();

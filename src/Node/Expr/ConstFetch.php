@@ -5,19 +5,21 @@ namespace PhpTestBed\Node\Expr;
 use PhpTestBed\Stylizer;
 use PhpTestBed\I18n;
 
-class ConstFetch extends \PhpTestBed\Node\ResolverConditionAbstract
+class ConstFetch extends \PhpTestBed\Node\NodeUsableAbstract
 {
 
     private $value;
+    private $constName;
 
     public function __construct(\PhpParser\Node\Expr\ConstFetch $node)
     {
+        $this->constName = $node->name->parts[0];
         parent::__construct($node);
     }
 
-    protected function resolve()
+    public function resolve()
     {
-        switch ($this->node->name->parts[0]) {
+        switch ($this->constName) {
             case 'true':
                 $this->value = true;
                 break;
@@ -25,22 +27,22 @@ class ConstFetch extends \PhpTestBed\Node\ResolverConditionAbstract
                 $this->value = false;
                 break;
             default:
-                $this->value = \PhpTestBed\Repository::getInstance()->getConst($this->node->name->parts[0]);
+                $this->value = \PhpTestBed\Repository::getInstance()->getConst($this->constName);
                 break;
         }
     }
 
     public function getExpr()
     {
-        return Stylizer::constant($this->node->name->parts[0]);
+        return Stylizer::constant($this->constName);
     }
 
-    public function message()
+    public function getMessage()
     {
         $mVar = [
             'expr' => Stylizer::expression($this->getExpr()),
             'value' => Stylizer::value($this->value),
-            'where' => \PhpTestBed\Repository::showUsed([], [], [])
+            'where' => \PhpTestBed\Repository::getInstance()->showUsed()
         ];
         return I18n::getInstance()->get('code.binary-op-var', $mVar);
     }
@@ -48,6 +50,11 @@ class ConstFetch extends \PhpTestBed\Node\ResolverConditionAbstract
     public function getResult()
     {
         return $this->value;
+    }
+
+    public function addUsage()
+    {
+        \PhpTestBed\Repository::getInstance()->addUsedConstant($this->constName, $this->value);
     }
 
 }

@@ -1,19 +1,17 @@
 <?php
+global $a, $b;
+$a = 1;
+const PhpTestBed = 'PhpTestBed';
+$melhorLib = PhpTestBed == 'PhpTestBed';
+$linguagem = 'PHP';
 
-if (true) {
-    try {
-        for ($i = 0; $i < 5; $i++) {
-            if ($i == 2) {
-                throw new \PhpTestBed\PhpExcep('out');
-            }
-            echo $i;
-            throw new Exception('lo');
-        }
-    } catch (PhpTestBed\PhpExcep $e) {
-        echo 'phpexcep';
-    } catch (Exception $e) {
-        echo 'excep';
-    } finally {
-        echo 'final';
-    }
+if ($melhorLib) {
+    echo PhpTestBed . ' vai ajudar você compreender melhor seus algoritmos em ' . $linguagem . '!';
+}
+echo 1;
+try {
+    echo 'entrou';
+    throw new Exception('helo');
+} catch (Exception $ex) {
+    echo 'catch';
 }

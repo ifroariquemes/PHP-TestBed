@@ -8,9 +8,10 @@
         <link rel="stylesheet" type="text/css" href="app/css/style.css">
     </head>
     <body>
-        <?php 
+        <?php
         PhpTestBed\I18n::setLocale('pt_BR');
-        PhpTestBed\ScriptCrawler::getInstance('test.php')->run(); 
+        $options = new \PhpTestBed\ScriptCrawler\Options('test.php');
+        PhpTestBed\ScriptCrawler::getInstance()->run($options);
         ?>
     </body>
 </html>

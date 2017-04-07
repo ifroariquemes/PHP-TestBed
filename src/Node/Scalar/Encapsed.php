@@ -2,18 +2,15 @@
 
 namespace PhpTestBed\Node\Scalar;
 
-use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
 
-class Encapsed extends \PhpTestBed\Node\ResolverAbstract
+class Encapsed extends \PhpTestBed\Node\NodeScalarAbstract
 {
-
-    private $result = '';
-    private $expr = '';
-    private $usedVars = array();
 
     public function __construct(\PhpParser\Node\Scalar\Encapsed $node)
     {
+        $this->expr = '';
+        $this->result = '';
         parent::__construct($node);
     }
 
@@ -27,27 +24,22 @@ class Encapsed extends \PhpTestBed\Node\ResolverAbstract
         return Stylizer::value($this->expr);
     }
 
-    public function getUsedVars()
-    {
-        return $this->usedVars;
-    }
-
-    protected function resolve()
+    public function resolve()
     {
         foreach ($this->node->parts as $expr) {
-            switch (get_class($expr)) {
-                case \PhpParser\Node\Scalar\EncapsedStringPart::class:
-                    $this->result .= $expr->value;
-                    $this->expr .= $expr->value;
-                    break;
-                case \PhpParser\Node\Expr\Variable::class:
-                    $value = \PhpTestBed\Repository::getInstance()->get($expr->name);
-                    $this->result .= $value;
-                    $this->expr .= Stylizer::variable($expr->name);
-                    $this->usedVars[$expr->name] = $value;
-                    break;
-            }
+            $nodeExpr = \PhpTestBed\Node\NodeLoader::load($expr);
+            $this->result .= $nodeExpr->getResult();
+            $this->expr .= $nodeExpr->getExpr();
         }
+    }
+
+    public function getMessage()
+    {
+        return \PhpTestBed\I18n::getInstance()->get('code.binary-op-var', [
+                    'value' => Stylizer::type($this->getResult()),
+                    'expr' => Stylizer::expression($this->getExpr()),
+                    'where' => \PhpTestBed\Repository::getInstance()->showUsed()
+        ]);
     }
 
 }

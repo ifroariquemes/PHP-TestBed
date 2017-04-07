@@ -4,6 +4,7 @@ code:
     echo-scalar: Imprime na tela :value
     assign: A variável :var recebe o valor :value
     assign-op: A variável :var recebe :value
+    scalar: o valor :value
     array: o conjunto de valores :value
     array-op: o conjunto de valores :value resultante da operação :expr
     const: A constante :const recebe o valor :value
@@ -44,6 +45,7 @@ code:
     try-finally-exit: --- Saiu do bloco FINALLY ---
     try-catch-check-ok: Avalia que a exceção disparada do tipo :throw é compatível com o tratamento para :catch
     try-catch-check-fail: A exceção disparada do tipo :throw não é compatível com o tratamento para :catch
+    global: Inicializa a variável global :var
 exceptions:
     script-not-found: Script :script não foi encontrado
     node-not-implemented: A resolução de :node ainda não foi implementada
