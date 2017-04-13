@@ -1,4 +1,4 @@
-# PhpTestBed v0.2.0
+# PhpTestBed v0.3.0
 
 A técnica do teste de mesa ajuda programadores de qualquer nível a compreender
 melhor a lógica empregada ao verificar o fluxo e mudanças de estados de varíavel
