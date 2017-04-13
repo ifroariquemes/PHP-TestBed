@@ -89,10 +89,10 @@ class Stylizer
 
     /**
      * Returns the message inside a structure that means value
-     * @param string $message The value
+     * @param mixed $message The value
      * @return string
      */
-    public static function value(string $message): string
+    public static function value($message): string
     {
         $code = '<span class="testbed-value">%s</span>';
         return sprintf($code, self::type($message));

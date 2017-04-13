@@ -3,7 +3,7 @@
 namespace PhpTestBed\Node\Expr\AssignOp;
 
 /**
- * Adition within assing operation $a += 1.
+ * Subtraction within assing operation $a -= 1.
  * @package PhpTestBed
  * @copyright (c) 2017, Federal Institute of Rondonia
  * @license http://gnu.org/licenses/lgpl.txt LGPL-3.0+
@@ -11,16 +11,15 @@ namespace PhpTestBed\Node\Expr\AssignOp;
  * @since Release 0.2.0
  * @link https://github.com/ifroariquemes/PHP-TestBed Github repository
  */
-class Plus extends NodeAssignOpAbstract
+class Minus extends NodeAssignOpAbstract
 {
-
-    /**
-     * Initializes object with a PhpParser AssignOp Plus statemtent.
-     * @param \PhpParser\Node\Expr\AssignOp\Plus $statement The statement
-     */
-    public function __construct(\PhpParser\Node\Expr\AssignOp\Plus $statement)
+/**
+ * Initializes object with a PhpParser AssignOp Minus statemtent.
+ * @param \PhpParser\Node\Expr\AssignOp\Minus $statement The statement
+ */
+    public function __construct(\PhpParser\Node\Expr\AssignOp\Minus $statement)
     {
-        $this->signal = '+';
+        $this->signal = '-';
         parent::__construct($statement);
     }
 

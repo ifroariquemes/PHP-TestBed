@@ -2,11 +2,8 @@
 
 namespace PhpTestBed\Node;
 
-use PhpTestBed\Node\NodeBaseAbstract;
-use PhpTestBed\Node\NodeExprInterface;
-
 /**
- * Base class for every PhpTestBed node that is scalar.
+ * Base class for every PhpTestBed node that is scalar based on primitive data types.
  * @package PhpTestBed
  * @copyright (c) 2017, Federal Institute of Rondonia
  * @license http://gnu.org/licenses/lgpl.txt LGPL-3.0+
@@ -28,5 +25,42 @@ abstract class NodeScalarAbstract extends NodeBaseAbstract implements NodeExprIn
      * @var mixed
      */
     protected $result;
+
+    /**
+     * Returns the expression message
+     * @return string
+     */
+    public function getExpr(): string
+    {
+        return \PhpTestBed\Stylizer::type($this->getResult());
+    }
+
+    /**
+     * Returns the output message
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return \PhpTestBed\I18n::getInstance()->get('code.scalar', [
+                    'value' => \PhpTestBed\Stylizer::type($this->getResult())
+        ]);
+    }
+
+    /**
+     * Returns the result
+     * @return mixed
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * Resolve the statement algorithm
+     */
+    public function resolve()
+    {
+        $this->result = $this->node->value;
+    }
 
 }

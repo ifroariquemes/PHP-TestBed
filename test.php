@@ -1,4 +1,5 @@
 <?php
+
 global $a, $b;
 $a = 1;
 const PhpTestBed = 'PhpTestBed';
@@ -15,3 +16,6 @@ try {
 } catch (Exception $ex) {
     echo 'catch';
 }
+
+$b = 3;
+echo $b <<= 2;

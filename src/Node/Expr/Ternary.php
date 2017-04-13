@@ -7,20 +7,41 @@ use PhpTestBed\Stylizer;
 use PhpTestBed\Repository;
 use PhpTestBed\Node\NodeLoader;
 
+/**
+ * A ternary if statement.
+ * @package PhpTestBed
+ * @copyright (c) 2017, Federal Institute of Rondonia
+ * @license http://gnu.org/licenses/lgpl.txt LGPL-3.0+
+ * @since Release 0.2.0 
+ * @author Natanael Simoes <natanael.simoes@ifro.edu.br>
+ * @link https://github.com/ifroariquemes/PHP-TestBed Github repository
+ */
 class Ternary extends \PhpTestBed\Node\NodeExprAbstract
 {
 
+    /**
+     * Initializes object with a PhpParser Ternary statemtent.
+     * @param \PhpParser\Node\Expr\Ternary $statement The statement
+     */
     public function __construct(\PhpParser\Node\Expr\Ternary $statement)
     {
         parent::__construct($statement);
     }
 
-    public function getExpr()
+    /**
+     * Returns the expression message.
+     * @return string
+     */
+    public function getExpr(): string
     {
         return $this->expr;
     }
 
-    public function getMessage()
+    /**
+     * Returns the output message.
+     * @return string
+     */
+    public function getMessage(): string
     {
         return I18n::getInstance()->get(
                         (preg_match("/[a-zA-Z]/i", $this->expr)) ?
@@ -31,16 +52,17 @@ class Ternary extends \PhpTestBed\Node\NodeExprAbstract
         ]);
     }
 
+    /**
+     * Evaluate the statement condition. If true, then gets the if node result,
+     * if false, then gets the else node result.
+     */
     public function resolve()
     {
         $nodeCond = NodeLoader::load($this->node->cond);
         $nodeIf = NodeLoader::load($this->node->if);
         $nodeElse = NodeLoader::load($this->node->else);
-        if ($nodeCond->getResult()) {
-            $this->result = $nodeIf->getResult();
-        } else {
-            $this->result = $nodeElse->getResult();
-        }
+        $this->result = $nodeCond->getResult() ?
+                $nodeIf->getResult() : $nodeElse->getResult();
         $this->expr = sprintf('%s ? %s : %s'
                 , $nodeCond->getExpr()
                 , $nodeIf->getExpr()

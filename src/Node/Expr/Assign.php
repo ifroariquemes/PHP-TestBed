@@ -6,22 +6,47 @@ use PhpTestBed\I18n;
 use PhpTestBed\Stylizer;
 use PhpTestBed\Repository;
 
+/**
+ * Statement used when assigning a value to a variable.
+ * @package PhpTestBed
+ * @copyright (c) 2017, Federal Institute of Rondonia
+ * @license http://gnu.org/licenses/lgpl.txt LGPL-3.0+
+ * @since Release 0.1.0 
+ * @author Natanael Simoes <natanael.simoes@ifro.edu.br>
+ * @link https://github.com/ifroariquemes/PHP-TestBed Github repository
+ */
 class Assign extends \PhpTestBed\Node\NodeExprAbstract
 {
 
+    /**
+     * The variable name.
+     * @var string
+     */
     private $varName;
 
+    /**
+     * Initializes object with a PhpParser Assign statemtent.
+     * @param \PhpParser\Node\Expr\Assign $statement The statement
+     */
     public function __construct(\PhpParser\Node\Expr\Assign $statement)
     {
         parent::__construct($statement);
     }
 
-    public function getExpr()
+    /**
+     * Returns the expression message.
+     * @return string
+     */
+    public function getExpr(): string
     {
         return $this->expr;
     }
 
-    public function getMessage()
+    /**
+     * Returns the output message.
+     * @return string
+     */
+    public function getMessage(): string
     {
         return I18n::getInstance()->get('code.binary-op', [
                     'value' => Stylizer::type($this->result),
@@ -29,14 +54,10 @@ class Assign extends \PhpTestBed\Node\NodeExprAbstract
         ]);
     }
 
-    protected function printMessage($message, $overrideLine = 0)
-    {
-        parent::printMessage(I18n::getInstance()->get('code.assign-op', [
-                    'var' => Stylizer::variable("\${$this->varName}"),
-                    'value' => $message
-                ]), $overrideLine);
-    }
-
+    /**
+     * Resolves the Assign statement putting the expression node result into
+     * variable at Repository.
+     */
     public function resolve()
     {
         $this->varName = $this->node->var->name;
@@ -45,7 +66,12 @@ class Assign extends \PhpTestBed\Node\NodeExprAbstract
             $this->result = $nodeExpr->getResult();
             $this->expr = $nodeExpr->getExpr();
             Repository::getInstance()->set($this->varName, $this->result);
-            $this->printMessage($nodeExpr->getMessage());
+            $this->printMessage(
+                    I18n::getInstance()->get('code.assign-op', [
+                        'var' => Stylizer::variable("\${$this->varName}"),
+                        'value' => $nodeExpr->getMessage()
+                    ])
+            );
         }
     }
 

@@ -1,4 +1,18 @@
 {
+    "name": "ifroariquemes/php-testbed",
+    "type": "library",
+    "description": "Executor de teste de mesa para scripts PHP",
+    "keywords": ["php", "testbed", "teste de mesa"],
+    "homepage": "https://github.com/ifroariquemes/PHP-TestBed",
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "Natanael Simões",
+            "email": "natanael.simoes@ifro.edu.br",
+            "homepage": "http://www.natanaelsimoes.com",
+            "role": "Professor"
+        }
+    ],
     "require": {
         "nikic/php-parser": "v3.0.1",
         "florianwolters/component-util-singleton": "v0.3.2",
