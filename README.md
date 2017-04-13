@@ -221,3 +221,6 @@ Script finalizado
 Ajude-nos a fazer esse software dar certo. Veja em milestones que funções essa
 biblioteca ainda precisa implementar. Ou então revise o que já existe para
 continuar melhorando a qualidade e desempenho.
+
+[![Licença Creative Commons](https://i.creativecommons.org/l/by/4.0/88x31.png)](blob/master/LICENSE.md)
+Este trabalho está licenciado com uma Licença [Creative Commons - Atribuição  4.0 Internacional](blob/master/LICENSE.md)
