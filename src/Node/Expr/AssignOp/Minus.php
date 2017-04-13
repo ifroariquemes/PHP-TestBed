@@ -6,7 +6,7 @@ namespace PhpTestBed\Node\Expr\AssignOp;
  * Subtraction within assing operation $a -= 1.
  * @package PhpTestBed
  * @copyright (c) 2017, Federal Institute of Rondonia
- * @license http://gnu.org/licenses/lgpl.txt LGPL-3.0+
+ * @license https://creativecommons.org/licenses/by/4.0/ CC BY 4.0
  * @author Natanael Simoes <natanael.simoes@ifro.edu.br>
  * @since Release 0.2.0
  * @link https://github.com/ifroariquemes/PHP-TestBed Github repository
