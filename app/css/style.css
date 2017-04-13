@@ -25,10 +25,12 @@ body {
 
 .testbed-system-message { color: #AE81FF }
 .testbed-system-exception { color: #FD971F }
+.testbed-expression .testbed-operation { color: black }
 .testbed-variable, .testbed-constant { color: #66D9EF }
 .testbed-expression .testbed-variable, .testbed-expression .testbed-constant { color: #6D3206 }
 .testbed-type-NULL, 
-.testbed-type-boolean { color: #F92672 }
+.testbed-type-boolean,
+.testbed-type-array { color: #F92672 }
 .testbed-type-string { color: #CE7B00 }
 .testbed-type-float, 
 .testbed-type-double,

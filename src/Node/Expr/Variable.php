@@ -5,39 +5,65 @@ namespace PhpTestBed\Node\Expr;
 use PhpTestBed\Stylizer;
 use PhpTestBed\I18n;
 
-class Variable extends \PhpTestBed\Node\ResolverAbstract
+/**
+ * Represents a variable.
+ * @package PhpTestBed
+ * @copyright (c) 2017, Federal Institute of Rondonia
+ * @license https://creativecommons.org/licenses/by/4.0/ CC BY 4.0
+ * @since Release 0.1.0 
+ * @author Natanael Simoes <natanael.simoes@ifro.edu.br>
+ * @link https://github.com/ifroariquemes/PHP-TestBed Github repository
+ */
+class Variable extends \PhpTestBed\Node\NodeUsableAbstract
 {
 
-    private $value;
-
+    /**
+     * Initializes object with a PhpParser Variable statemtent.
+     * @param \PhpParser\Node\Expr\Variable $node The statement
+     */
     public function __construct(\PhpParser\Node\Expr\Variable $node)
     {
         parent::__construct($node);
     }
 
-    protected function resolve()
+    /**
+     * Resolves the statement getting the variable value at Repository.
+     */
+    public function resolve()
     {
-        $this->value = \PhpTestBed\Repository::getInstance()->get($this->node->name);
+        $this->result = \PhpTestBed\Repository::getInstance()->get($this->node->name);
     }
 
-    public function getExpr()
+    /**
+     * Returns the expression message.
+     * @return string
+     */
+    public function getExpr(): string
     {
         return Stylizer::variable("\${$this->node->name}");
     }
 
-    public function message()
+    /**
+     * Return the output message.
+     * @return string
+     */
+    public function getMessage(): string
     {
-        $mVar = [
-            'expr' => Stylizer::expression($this->getExpr()),
-            'value' => Stylizer::value($this->value),
-            'where' => \PhpTestBed\Repository::showUsed([], [$this->node->name => $this->value], [])
-        ];
-        return I18n::getInstance()->get('code.binary-op-var', $mVar);
+        return I18n::getInstance()->get('code.binary-op-var', [
+                    'expr' => Stylizer::expression($this->getExpr()),
+                    'value' => !is_array($this->result) ?
+                    Stylizer::value($this->result) :
+                    Array_::prepareArrayToPrint($this->result),
+                    'where' => \PhpTestBed\Repository::getInstance()->showUsed()
+        ]);
     }
 
-    public function getResult()
+    /**
+     * Adds the usage of the variable being used
+     */
+    public function addUsage()
     {
-        return $this->value;
+        \PhpTestBed\Repository::getInstance()->addUsedVariable($this->node->name, $this->result);
     }
 
 }

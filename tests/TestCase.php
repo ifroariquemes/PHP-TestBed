@@ -32,5 +32,11 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->i18n->get('messages.end'), end($this->messages));
     }
+    
+    public static function assertEquals($expected, $actual, $message = '', $delta = 0.0, $maxDepth = 10, $canonicalize = false, $ignoreCase = false)
+    {
+        $newMessage = "Actual:  $actual\nExpected: $expected";
+        parent::assertEquals($expected, $actual, $newMessage, $delta, $maxDepth, $canonicalize, $ignoreCase);
+    }
 
 }

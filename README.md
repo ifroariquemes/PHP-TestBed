@@ -1,4 +1,4 @@
-# PhpTestBed v0.1
+# PhpTestBed v0.2.0
 
 A técnica do teste de mesa ajuda programadores de qualquer nível a compreender
 melhor a lógica empregada ao verificar o fluxo e mudanças de estados de varíavel
@@ -52,130 +52,166 @@ Script finalizado
     </tr>
 	<tr>
     	<td>If-Else</td>
-    	<td>v0.1</td>
+    	<td>v0.1.0</td>
+	</tr>
+        <tr>
+    	<td>Switch-Case-Default</td>
+    	<td>v0.2.0</td>
 	</tr>
   	<tr>
     <td colspan="2"><b>Laços de repetição</b></td>
   	</tr>
     <tr>
     <td>For</td>
-    <td>v0.1</td>
+    <td>v0.1.0</td>
+    </tr>
+    <tr>    
+    <td>Foreach</td>
+    <td>v0.2.0</td>
     </tr>
     <tr>
     <td>While</td>
-    <td>v0.1</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
     <td>Do-While</td>
-    <td>v0.1</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
     <td colspan="2"><b>Operações aritméticas</b></td>
   	</tr>
     <tr>
-    <td>Soma (+)</td>
-    <td>v0.1</td>
+    <td>Soma (`+`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Subtração (-)</td>
-    <td>v0.1</td>
+    <td>Subtração (`-`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Multiplicação (*)</td>
-    <td>v0.1</td>
+    <td>Multiplicação (`*`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Divisão (/)</td>
-    <td>v0.1</td>
+    <td>Divisão (`/`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Resto da divisão (%)</td>
-    <td>v0.1</td>
+    <td>Resto da divisão (`%`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Deslocamento binário (&lt;&lt; e &gt;&gt;)</td>
-    <td>v0.1</td>
+    <td>Deslocamento binário (`&lt;&lt;` e `&gt;&gt;`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Incrementação (++)</td>
-    <td>v0.1 (posterior)</td>
+    <td>Incrementação (`++`)</td>
+    <td>v0.1.0 (posterior)<br>v0.2.0(anterior)</td>
+    </tr>
+    <tr>
+    <td>Decrementação (`--`)</td>
+    <td>v0.2.0</td>
     </tr>
     <tr>
     <td colspan="2"><b>Operações lógicas</b></td>
     </tr>
     <tr>
-    <td>Booleano E (&amp;&amp;)</td>
-    <td>v0.1</td>
+    <td>Booleano E (`&amp;&amp;`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Booleano OU (||)</td>
-    <td>v0.1</td>
+    <td>Booleano OU (`||`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Bitwise E (&amp;)</td>
-    <td>v0.1</td>
+    <td>Bitwise E (`&amp;`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Bitwise OU (|)</td>
-    <td>v0.1</td>
+    <td>Bitwise OU (`|`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Bitwise OU EXCLUSIVO (^)</td>
-    <td>v0.1</td>
+    <td>Bitwise OU EXCLUSIVO (`^`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
     <td colspan="2"><b>Operações relacionais</b></td>
     </tr>
     <tr>	
-    <td>Igual (==)</td>
-    <td>v0.1</td>
+    <td>Igual (`==`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>	
-    <td>Idêntico (===)</td>
-    <td>v0.1</td>
+    <td>Idêntico (`===`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>	
-    <td>Diferente (!=)</td>
-    <td>v0.1</td>
+    <td>Diferente (`!=`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>	
-    <td>Não idêntico (!==)</td>
-    <td>v0.1</td>
+    <td>Não idêntico (`!==`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>	
-    <td>Maior (&gt;)</td>
-    <td>v0.1</td>
+    <td>Maior (`&gt;`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>	
-    <td>Maior ou igual (&gt;=)</td>
-    <td>v0.1</td>
+    <td>Maior ou igual (`&gt;=`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>	
-    <td>Menor (&lt;)</td>
-    <td>v0.1</td>
+    <td>Menor (`&lt;`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>	
-    <td>Menor ou igual (&lt;=)</td>
-    <td>v0.1</td>
+    <td>Menor ou igual (`&lt;=`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>	
-    <td>Nave espacial (&lt;=&gt;)</td>
-    <td>v0.1</td>
+    <td>Nave espacial (`&lt;=&gt;`)</td>
+    <td>v0.1.0</td>
     </tr>	
     <tr>
     <td colspan="2"><b>Outros</b></td>
     </tr>
     <tr>	
     <td>Echo</td>
-    <td>v0.1</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Atribuição (=)</td>
-    <td>v0.1</td>
+    <td>Atribuição (`=`)</td>
+    <td>v0.1.0</td>
     </tr>
     <tr>
-    <td>Concatenação (.)</td>
-    <td>v0.1</td>
+    <td>Concatenação (`.`)</td>
+    <td>v0.1.0</td>
+    </tr>
+    <tr>
+    <td>Global</td>
+    <td>v0.2.0</td>
+    </tr>
+    <tr>
+    <td>Parada (`break`)</td>
+    <td>v0.2.0</td>
+    </tr>
+    <tr>
+    <td>Constantes</td>
+    <td>v0.2.0 (`const`)<br>em breve (`define`)</td>
+    </tr>
+    <tr>
+    <td>Vetores e Matrizes (`array()` e `[]`)</td>
+    <td>v0.2.0</td>
+    </tr>
+    <tr>
+    <td>Try-Catch-Finally</td>
+    <td>v0.2.0</td>
+    </tr>
+    <tr>
+    <td>Throw</td>
+    <td>v0.2.0</td>
     </tr>
     </table>
 
@@ -185,3 +221,7 @@ Script finalizado
 Ajude-nos a fazer esse software dar certo. Veja em milestones que funções essa
 biblioteca ainda precisa implementar. Ou então revise o que já existe para
 continuar melhorando a qualidade e desempenho.
+
+[![Licença Creative Commons](https://i.creativecommons.org/l/by/4.0/88x31.png)](LICENSE.md)
+
+Este trabalho está licenciado com uma Licença [Creative Commons - Atribuição  4.0 Internacional](LICENSE.md)

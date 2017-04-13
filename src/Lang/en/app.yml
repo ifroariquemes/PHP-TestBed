@@ -4,6 +4,7 @@ code:
     echo-scalar: Prints :value
     assign: The variable :var receives the value :value
     assign-op: The variable :var receives :value
+    scalar: the value :value
     array: the set of values :value
     array-op: the set of values :value resultant of the operation :expr
     const: The constant :const receives the value :value
@@ -33,6 +34,18 @@ code:
     switch-case-enter: --- Enter the switch CASE ---
     switch-case-exit: --- Exit the switch CASE ---
     break: Performs request to stop actual block execution
+    foreach-next-key: The variable :var receives the next index from :origin, with the value :value
+    foreach-next-item: The variable :var receives the next item from :origin, with the value :value
+    throw: Throws a exception, interrupts program execution
+    try-enter: --- Enter block TRY ---
+    try-exit: --- Exit block TRY ---
+    try-catch-enter: --- Enter block CATCH ---
+    try-catch-exit: --- Exit block CATCH ---
+    try-finally-enter: --- Enter block  FINALLY ---
+    try-finally-exit: --- Exit block FINALLY ---
+    try-catch-check-ok: The exception thrown :throw is compatible with the treatment for :catch
+    try-catch-check-fail: The exception thrown :throw is NOT compatible with the treatment for :catch
+    global: Initialize the global variable :var
 exceptions:
     script-not-found: Script :script not found
     node-not-implemented: Resolution of :node not implemented yet

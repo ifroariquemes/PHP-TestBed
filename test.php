@@ -1,5 +1,11 @@
 <?php
-$a = [['a',false], ['c','d']];
-for($i = 0; $a[0][1]; $i++) {
-    
+
+global $a, $b;
+$a = 1;
+const PhpTestBed = 'PhpTestBed';
+$melhorLib = PhpTestBed == 'PhpTestBed';
+$linguagem = 'PHP';
+
+if ($melhorLib) {
+    echo PhpTestBed . ' vai ajudar você compreender melhor seus algoritmos em ' . $linguagem . '!';
 }

@@ -22,7 +22,7 @@ class AssignTest extends \PhpTestBed_Test\TestCase
                     'value' => 10
                 ])
         );
-        $this->assertEquals($actual, $this->messages[1]);
+        $this->assertEquals($this->messages[1], $actual);
     }
 
     public function testVariableBitwise()
@@ -35,12 +35,12 @@ class AssignTest extends \PhpTestBed_Test\TestCase
                     'var' => '$d',
                     'value' => $this->i18n->get('code.binary-op-var', [
                         'value' => 40,
-                        'expr' => '($a &lt;&lt; 2)',
+                        'expr' => '($a << 2)',
                         'where' => '$a = 10'
                     ])
                 ])
         );
-        $this->assertEquals($actual, $this->messages[2]);
+        $this->assertEquals($this->messages[2], $actual);
     }
 
 }

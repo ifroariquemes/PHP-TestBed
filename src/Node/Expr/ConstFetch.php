@@ -5,49 +5,80 @@ namespace PhpTestBed\Node\Expr;
 use PhpTestBed\Stylizer;
 use PhpTestBed\I18n;
 
-class ConstFetch extends \PhpTestBed\Node\ResolverConditionAbstract
+/**
+ * Used when fetching a constant value.
+ * @package PhpTestBed
+ * @copyright (c) 2017, Federal Institute of Rondonia
+ * @license https://creativecommons.org/licenses/by/4.0/ CC BY 4.0
+ * @since Release 0.2.0 
+ * @author Natanael Simoes <natanael.simoes@ifro.edu.br>
+ * @link https://github.com/ifroariquemes/PHP-TestBed Github repository
+ */
+class ConstFetch extends \PhpTestBed\Node\NodeUsableAbstract
 {
 
-    private $value;
+    /**
+     * The constant name.
+     * @var string
+     */
+    private $constName;
 
+    /**
+     * Initializes object with a PhpParser ConstFetch statemtent.
+     * @param \PhpParser\Node\Expr\ConstFetch $node The statement
+     */
     public function __construct(\PhpParser\Node\Expr\ConstFetch $node)
     {
+        $this->constName = $node->name->parts[0];
         parent::__construct($node);
     }
 
-    protected function resolve()
+    /**
+     * Resolves the ConstFetch statement getting the its value from Repository.
+     */
+    public function resolve()
     {
-        switch ($this->node->name->parts[0]) {
+        switch ($this->constName) {
             case 'true':
-                $this->value = true;
+                $this->result = true;
                 break;
             case 'false':
-                $this->value = false;
+                $this->result = false;
                 break;
             default:
-                $this->value = \PhpTestBed\Repository::getInstance()->getConst($this->node->name->parts[0]);
+                $this->result = \PhpTestBed\Repository::getInstance()->getConst($this->constName);
                 break;
         }
     }
 
-    public function getExpr()
+    /**
+     * Returns the expression message.
+     * @return string
+     */
+    public function getExpr(): string
     {
-        return Stylizer::constant($this->node->name->parts[0]);
+        return Stylizer::constant($this->constName);
     }
 
-    public function message()
+    /**
+     * Returns the output message.
+     * @return string
+     */
+    public function getMessage(): string
     {
-        $mVar = [
-            'expr' => Stylizer::expression($this->getExpr()),
-            'value' => Stylizer::value($this->value),
-            'where' => \PhpTestBed\Repository::showUsed([], [], [])
-        ];
-        return I18n::getInstance()->get('code.binary-op-var', $mVar);
+        return I18n::getInstance()->get('code.binary-op-var', [
+                    'expr' => Stylizer::expression($this->getExpr()),
+                    'value' => Stylizer::value($this->result),
+                    'where' => \PhpTestBed\Repository::getInstance()->showUsed()
+        ]);
     }
 
-    public function getResult()
+    /**
+     * Adds the use of this constant at current script line execution.
+     */
+    public function addUsage()
     {
-        return $this->value;
+        \PhpTestBed\Repository::getInstance()->addUsedConstant($this->constName, $this->result);
     }
 
 }
