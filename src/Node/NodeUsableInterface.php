@@ -25,4 +25,6 @@ interface NodeUsableInterface
      * node should be in (const, var or array).
      */
     public function addUsage();
+
+    public function getName();
 }

@@ -19,10 +19,9 @@ class Assign extends \PhpTestBed\Node\NodeExprAbstract
 {
 
     /**
-     * The variable name.
-     * @var string
+     * @var \PhpParser\NodeAbstract
      */
-    private $varName;
+    private $assignNode;
 
     /**
      * Initializes object with a PhpParser Assign statemtent.
@@ -50,7 +49,7 @@ class Assign extends \PhpTestBed\Node\NodeExprAbstract
     {
         return I18n::getInstance()->get('code.binary-op', [
                     'value' => Stylizer::type($this->result),
-                    'expr' => Stylizer::expression(Stylizer::variable("\${$this->varName}")),
+                    'expr' => $this->assignNode->getExpr(),
         ]);
     }
 
@@ -60,15 +59,17 @@ class Assign extends \PhpTestBed\Node\NodeExprAbstract
      */
     public function resolve()
     {
-        $this->varName = $this->node->var->name;
+        $this->assignNode = \PhpTestBed\Node\NodeLoader::load($this->node->var);
         $nodeExpr = \PhpTestBed\Node\NodeLoader::load($this->node->expr);
         if (!is_null($nodeExpr)) {
             $this->result = $nodeExpr->getResult();
             $this->expr = $nodeExpr->getExpr();
-            Repository::getInstance()->set($this->varName, $this->result);
+            $dims = array();
+            preg_match_all("/\[(.*?)\]/", $this->assignNode->getExpr(), $dims);
+            Repository::getInstance()->set($this->assignNode->getName(), $this->result, $dims[1]);
             $this->printMessage(
                     I18n::getInstance()->get('code.assign-op', [
-                        'var' => Stylizer::variable("\${$this->varName}"),
+                        'var' => $this->assignNode->getExpr(),
                         'value' => $nodeExpr->getMessage()
                     ])
             );

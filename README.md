@@ -11,7 +11,17 @@ de script, do início até a conclusão da execução do script.
 Ainda estamos em desenvolvimento inicial, por isso a quantidade de recursos da
 linguagem que são suportados são poucos.
 
-## Exemplo
+## Instalação 
+
+É necessário [Composer](http://getcomposer.org) para o gerenciamento das dependências.
+
+```
+$ git clone https://github.com/ifroariquemes/PHP-TestBed
+$ cd PHP-TestBed
+$ composer install
+```
+
+## Exemplo de uso
 
 Script de teste:
 ```php

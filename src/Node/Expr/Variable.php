@@ -65,5 +65,10 @@ class Variable extends \PhpTestBed\Node\NodeUsableAbstract
     {
         \PhpTestBed\Repository::getInstance()->addUsedVariable($this->node->name, $this->result);
     }
+    
+    public function getName()
+    {
+        return $this->node->name;
+    }
 
 }

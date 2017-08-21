@@ -23,6 +23,11 @@ abstract class NodeUsableAbstract extends NodeExprAbstract implements NodeUsable
     {
         parent::__construct($statement);
         $this->addUsage();
+    }    
+    
+    public function getName()
+    {
+        return $this->node->var->name;
     }
 
 }

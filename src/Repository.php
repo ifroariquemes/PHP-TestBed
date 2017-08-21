@@ -78,9 +78,19 @@ class Repository
      * @param string $varName The variable name
      * @param mixed $value The variable value
      */
-    public function set(string $varName, $value)
+    public function set(string $varName, $value, $dims = null)
     {
-        $this->variables[$varName] = $value;
+        if (empty($dims)) {
+            $this->variables[$varName] = $value;
+        } else {
+            $aux = &$this->variables[$varName];
+            foreach ($dims as $dim) {
+                $dim = strip_tags($dim);
+                $aux = &$aux[ctype_digit($dim) ? intval($dim) : $dim];
+            }
+            $aux = $value;
+            unset($aux);
+        }
     }
 
     /**

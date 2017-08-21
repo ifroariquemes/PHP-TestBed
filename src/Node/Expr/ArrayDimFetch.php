@@ -69,7 +69,7 @@ class ArrayDimFetch extends \PhpTestBed\Node\NodeUsableAbstract
                 (new ArrayDimFetch($this->node->var, true))->getExpr() :
                 Stylizer::variable($this->varName)
                 , Stylizer::operation('[')
-                , NodeLoader::load($this->node->dim)->getExpr()
+                , Stylizer::value(NodeLoader::load($this->node->dim)->getResult())
                 , Stylizer::operation(']')
         );
     }
@@ -95,6 +95,11 @@ class ArrayDimFetch extends \PhpTestBed\Node\NodeUsableAbstract
     public function getVarName(): string
     {
         return $this->varName;
+    }
+    
+    public function getName(): string
+    {
+        return $this->getVarName();
     }
 
     /**
